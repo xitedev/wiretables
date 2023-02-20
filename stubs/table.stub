@@ -1,0 +1,39 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Xite\Wiretables\Columns\IdColumn;
+use Xite\Wiretables\Table;
+
+class {{ class }} extends Table
+{
+    /**
+     * @throws AuthorizationException
+     */
+    public function mount({{ model }} ${{ modelVariable }}): void
+    {
+        $this->model = ${{ modelVariable }};
+        $this->authorize('viewAny', $this->model);
+    }
+
+    public function getTitleProperty(): string
+    {
+//
+    }
+
+    protected function query(): Builder
+    {
+        return {{ model }}::searchQuery();
+    }
+
+    protected function columns(): Collection
+    {
+        return collect([
+            IdColumn::make('id')
+        ]);
+    }
+}

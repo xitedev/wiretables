@@ -1,18 +1,4 @@
 <div class="max-w-full mx-auto">
-    @if($withBreadcrumbs)
-        <div class="flex flex-wrap w-full justify-between items-center">
-            <x-breadcrumbs wire:key="breadcrumbs" wire:ignore />
-
-            @if($this->globalButtons)
-                <div class="flex space-x-1 items-center sm:pr-4">
-                    @foreach($this->globalButtons as $button)
-                        {!! $button->renderIt() !!}
-                    @endforeach
-                </div>
-            @endif
-        </div>
-    @endif
-
     <x-wiretables::wiretable>
         <x-slot name="actions">
             @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())

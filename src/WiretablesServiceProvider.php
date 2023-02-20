@@ -3,6 +3,7 @@
 namespace Xite\Wiretables;
 
 use Livewire\Livewire;
+use Xite\Wiretables\Commands\TableMakeCommand;
 use Xite\Wiretables\Modals\DeleteModal;
 use Xite\Wiretables\Modals\RestoreModal;
 use Spatie\LaravelPackageTools\Package;
@@ -16,7 +17,8 @@ class WiretablesServiceProvider extends PackageServiceProvider
             ->name('wiretables')
             ->hasConfigFile()
             ->hasTranslations()
-            ->hasViews('wiretables');
+            ->hasCommand(TableMakeCommand::class)
+            ->hasViews();
     }
 
     public function packageBooted(): void

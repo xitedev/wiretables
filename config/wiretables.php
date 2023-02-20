@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'layout' => 'layouts.app'
+    'layout' => 'layouts.app',
+    'namespace' => 'Http\\Wiretables'
 ];

@@ -97,7 +97,7 @@
                 </x-slot>
             @endif
 
-            <x-slot name="body" wire:loading.class="opacity-50" class="border-b-0">
+            <x-slot name="body" wire:loading.class="opacity-50" class="border-b-0 text-sm">
                 @forelse($this->data->items() as $row)
                     <x-wiretables::table.tr id="row-{{ $row->id }}" wire:key="row-{{ $row->id }}">
                         @foreach($this->columns as $column)

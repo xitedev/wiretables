@@ -18,7 +18,6 @@ abstract class Table extends Wiretable
     use WithActions;
 
     public ?string $layout = null;
-    public bool $withBreadcrumbs = true;
 
     public function render(): View
     {
@@ -26,7 +25,9 @@ abstract class Table extends Wiretable
             ->layout($this->layout ?? config('wiretables.layout'))
             ->layoutData([
                 'title' => $this->getTitleProperty(),
-            ])
-            ->slot('main');
+                'buttons' =>  $this->globalButtons
+                    ->map(fn ($button) => $button->renderIt()->render())
+                    ->implode("\r\n")
+            ]);
     }
 }

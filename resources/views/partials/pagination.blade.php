@@ -1,12 +1,11 @@
-<div class="bg-white px-4 py-3 flex border border-gray-200 items-center justify-between sm:px-6">
+<div class="bg-white px-4 py-3 flex border-x border-b border-gray-200 items-center justify-between sm:px-6">
     <div class="hidden sm:block">
-        <p class="text-sm leading-5 text-gray-700">
+        <p class="text-sm leading-5 text-gray-600">
             @lang('wiretables::table.total', ['from' => $paginator->firstItem() ?? 0, 'to' => $paginator->lastItem() ?? 0, 'total' => $paginator->total()])
         </p>
     </div>
     @if ($paginator->hasPages())
         <nav role="navigation" aria-label="Pagination Navigation" class="relative z-0 inline-flex">
-            {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
                 <span class="relative inline-flex items-center px-2 py-1.5 rounded-l-sm border border-gray-300 text-sm leading-5 font-medium text-gray-500 bg-gray-100 cursor-not-allowed"
                       aria-hidden="true"
@@ -28,16 +27,13 @@
                 </button>
             @endif
 
-            {{-- Pagination Elements --}}
             @foreach ($elements as $element)
-                {{-- "Three Dots" Separator --}}
                 @if (is_string($element))
                     <span class="-ml-px relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700" wire:key="dots-{{ $loop->index }}">
                         {{ $element }}
                     </span>
                 @endif
 
-                {{-- Array Of Links --}}
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page === $paginator->currentPage())
@@ -57,7 +53,6 @@
                 @endif
             @endforeach
 
-            {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <button wire:click="nextPage"
                         rel="next"
