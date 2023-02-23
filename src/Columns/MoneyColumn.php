@@ -3,7 +3,6 @@
 namespace Xite\Wiretables\Columns;
 
 use Illuminate\Contracts\View\View;
-use Money\Money;
 use NumberFormatter;
 
 class MoneyColumn extends Column
@@ -35,7 +34,7 @@ class MoneyColumn extends Column
         return $this;
     }
 
-    public function getAmount(Money $value): string
+    public function getAmount($value): string
     {
         if ($this->showSign && $value->isNegative()) {
             $value = $value->absolute();
@@ -68,15 +67,7 @@ class MoneyColumn extends Column
 
         $value = $this->displayData($row);
 
-        if (! $value instanceof Money) {
-            return false;
-        }
-
-        if ($this->hideZero && $value->isZero()) {
-            return false;
-        }
-
-        return true;
+        return !($this->hideZero && $value->isZero());
     }
 
     public function renderIt($row): ?string

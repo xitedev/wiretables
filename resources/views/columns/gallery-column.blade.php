@@ -1,7 +1,7 @@
 <div class="relative w-16">
     @if($media->count() > 1)
         <div class="absolute -right-1 -top-1">
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xxs font-medium bg-green-300 text-green-900">
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-300 text-green-900">
                 {{ $media->count() }}
             </span>
         </div>

@@ -94,7 +94,7 @@ trait WithButtons
                 $this->showRestoreButton(),
                 fn ($buttons) => $buttons->push(
                     ModalButton::make('restore')
-                        ->icon('heroicon-o-reply')
+                        ->icon('heroicon-o-arrow-uturn-left')
                         ->modal(RestoreModal::getName())
                         ->withParams(fn ($row) => [
                             'modelName' => get_class($row),

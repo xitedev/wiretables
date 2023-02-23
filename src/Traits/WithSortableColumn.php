@@ -4,60 +4,39 @@ namespace Xite\Wiretables\Traits;
 
 trait WithSortableColumn
 {
-    public function updateRowSort($from, $to): void
+    public function updateRowSort($data): void
     {
-//        check if order is the same
-        if ($from === $to) {
-            return;
-        }
-
 //        check if model is sortable 'has SortableTrait'
         if (! method_exists($this->model, 'bootSortableTrait')) {
-            info('model is not sortable');
-
             return;
         }
 
         $orderColumn = $this->getOrderColumn();
 
 //        check if current sort is sortable field
-        if ($this->getSortProperty() !== $orderColumn) {
-            info("please sort by {$orderColumn}");
-
+        if ($this->sort !== $orderColumn) {
             return;
         }
 
-        $newQuery = app($this->model)->buildSortQuery();
+        $items = collect($data)
+            ->mapWithKeys(fn ($item) => [$item['order'] => $item['value']])
+            ->all();
 
-        $fromModel = $this->model::find($from);
-        $toModel = $this->model::find($to);
+        if ($this->page > 1) {
+            $startOrder = $this->model::query()
+                ->whereIn('id', $items)
+                ->orderBy('order_column')
+                ->value('order_column');
 
-        $prepending = $fromModel->{$orderColumn} > $toModel->{$orderColumn};
+            $this->model::setNewOrder($items, $startOrder);
+        }
 
-        $columns = $newQuery
-            ->when(
-                $prepending,
-                fn ($query) => $query
-                    ->where($orderColumn, '>=', $toModel->{$orderColumn})
-                    ->where($orderColumn, '<', $fromModel->{$orderColumn}),
-                fn ($query) => $query
-                    ->where($orderColumn, '>', $fromModel->{$orderColumn})
-                    ->where($orderColumn, '<', $toModel->{$orderColumn})
-            )
-            ->ordered()
-            ->get()
-            ->when(
-                $prepending,
-                fn ($collection) => $collection->prepend($fromModel),
-                fn ($collection) => $collection->push($fromModel)
-            );
-
-        $this->model::setNewOrder($columns->pluck('id'), $columns->min($orderColumn));
+        $this->model::setNewOrder($items);
     }
 
-    public function getOrderColumn()
+    public function getOrderColumn(): string
     {
-        return app($this->model)->determineOrderColumnName();
+        return $this->model->determineOrderColumnName();
     }
 
     public function getUseSortProperty(): bool
@@ -70,7 +49,7 @@ trait WithSortableColumn
             return false;
         }
 
-        return $this->getOrderColumn() === $this->getSortProperty();
+        return $this->getOrderColumn() === $this->sort;
     }
 
     public function moveOrderUp($id): void

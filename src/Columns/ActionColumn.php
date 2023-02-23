@@ -8,7 +8,7 @@ use Xite\Wiretables\Contracts\ButtonContract;
 
 class ActionColumn extends Column
 {
-    protected ?int $width = 0;
+    protected ?int $width = 1;
     private Collection $buttons;
 
     public function withButtons(Collection $buttons): self

@@ -6,8 +6,9 @@ use Illuminate\Contracts\View\View;
 
 class IdColumn extends Column
 {
+    protected ?int $width = 1;
     public bool $hasHighlight = true;
-    public array $class = ['pl-2'];
+    public array $class = ['text-center'];
     public ?string $showRoute = null;
 
     public function getTitle(): ?string

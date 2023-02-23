@@ -2,8 +2,8 @@
     <div
         @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
             x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
-            @toggle-filter.window="filtersAreShown = !filtersAreShown"
-            @hide-filter.window="filtersAreShown = false"
+        @toggle-filter.window="filtersAreShown = !filtersAreShown"
+        @hide-filter.window="filtersAreShown = false"
         @endif
     >
         <div class="flex justify-end items-center content-center flex space-x-1 sm:space-x-2">
@@ -97,11 +97,23 @@
                 </x-slot>
             @endif
 
-            <x-slot name="body" wire:loading.class="opacity-50" class="border-b-0 text-sm">
+            <x-slot name="body"
+                    wire:loading.class="opacity-50"
+                    class="text-sm"
+                    :wire:sortable="method_exists($this, 'getUseSortProperty') ? 'updateRowSort' : null"
+                    :wire:sortable.options="method_exists($this, 'getUseSortProperty') ? '{ animation: 100 }' : null"
+            >
                 @forelse($this->data->items() as $row)
-                    <x-wiretables::table.tr id="row-{{ $row->id }}" wire:key="row-{{ $row->id }}">
+                    <x-wiretables::table.tr
+                        id="row-{{ $row->getKey() }}"
+                        wire:key="row-{{ $row->getKey() }}"
+                        :wire:sortable.item="method_exists($this, 'getUseSortProperty') ? $row->getKey() : null"
+                    >
                         @foreach($this->columns as $column)
-                            <x-wiretables::table.td :class="$column->getClass($row)" wire:key="p-column-{{ $row->id }}-{{ $loop->index }}">
+                            <x-wiretables::table.td
+                                :class="$column->getClass($row)"
+                                wire:key="p-column-{{ $row->getKey() }}-{{ $loop->index }}"
+                            >
                                 @if($column->canDisplay($row))
                                     {!! $column->renderIt($row) !!}
                                 @endif
