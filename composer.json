@@ -14,13 +14,13 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/contracts": "^10.0",
-        "livewire/livewire": "^2.10",
+        "php": "^8.1|^8.2",
+        "illuminate/contracts": "^9.0|^10.0",
+        "livewire/livewire": "^2.12",
+        "spatie/laravel-package-tools": "^1.14",
+        "spatie/laravel-query-builder": "^5.2",
         "xitedev/searchable": "@dev || ^1.0",
-        "xitedev/wireforms": "@dev || ^1.0",
-        "spatie/laravel-package-tools": "^1.11",
-        "spatie/laravel-query-builder": "^5.0"
+        "xitedev/wireforms": "@dev || ^1.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

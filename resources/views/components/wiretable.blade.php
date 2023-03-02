@@ -1,48 +1,64 @@
 <div {{ $attributes->class('flex flex-col') }}>
     <div
-        @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+        @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
             x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
         @toggle-filter.window="filtersAreShown = !filtersAreShown"
         @hide-filter.window="filtersAreShown = false"
         @endif
     >
-        <div class="flex justify-end items-center content-center flex space-x-1 sm:space-x-2">
-            @isset($actions)
-                {{ $actions }}
-            @endif
+        <div class="flex justify-between items-center content-center flex space-x-1 sm:space-x-2">
+            <div class="flex space-x-2 items-center">
+                <label for="per-page" class="text-sm text-gray-500 hidden lg:block">{{ __('wiretables::table.per_page') }}</label>
+                <select
+                    id="per-page"
+                    class="block pl-2 pr-8 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
+                    name="perPage"
+                    wire:model="perPage"
+                >
+                    @foreach($this->perPageOptions as $option)
+                        <option value="{{ $option }}" @selected($this->perPage)>{{ $option }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-            @if(method_exists($this, 'bootWithSearching') && !$this->disableSearch)
-                <div class="lg:max-w-sm flex items-center py-2">
-                    <label for="search" class="sr-only">{{ __('wiretables::table.search') }}</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-                            <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input
-                            id="search"
-                            placeholder="{{ __('wiretables::table.search') }}"
-                            type="search"
-                            value="{{  $this->search }}"
-                            wire:model.debounce.1s="search"
-                            class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
-                        >
-                        @unless($this->disableStrict)
-                            <div class="absolute inset-y-0 right-0 pr-2 flex items-center">
-                                <input name="strict"
-                                       type="checkbox"
-                                       class="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary-500 checked:border-primary-500 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
-                                       wire:model="strict"
-                                >
+
+            <div class="flex space-x-2">
+                @isset($actions)
+                    {{ $actions }}
+                @endif
+                @if(method_exists($this, 'bootWithSearching') && !$this->disableSearch)
+                    <div class="lg:max-w-sm flex items-center py-2">
+                        <label for="search" class="sr-only">{{ __('wiretables::table.search') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                </svg>
                             </div>
-                        @endunless
+                            <input
+                                id="search"
+                                placeholder="{{ __('wiretables::table.search') }}"
+                                type="search"
+                                value="{{ $this->search }}"
+                                wire:model.debounce.1s="search"
+                                class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
+                            >
+                            @unless($this->disableStrict)
+                                <div class="absolute inset-y-0 right-0 pr-2 flex items-center">
+                                    <input name="strict"
+                                           type="checkbox"
+                                           class="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary-500 checked:border-primary-500 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
+                                           wire:model="strict"
+                                    >
+                                </div>
+                            @endunless
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
 
-        @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+        @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
             <div
                 class="flex justify-between bg-white border border-gray-200 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                 x-show="filtersAreShown"
@@ -100,14 +116,14 @@
             <x-slot name="body"
                     wire:loading.class="opacity-50"
                     class="text-sm"
-                    :wire:sortable="method_exists($this, 'getUseSortProperty') ? 'updateRowSort' : null"
-                    :wire:sortable.options="method_exists($this, 'getUseSortProperty') ? '{ animation: 100 }' : null"
+                    :wire:sortable="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? 'updateRowSort' : null"
+                    :wire:sortable.options="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? '{ animation: 100 }' : null"
             >
                 @forelse($this->data->items() as $row)
                     <x-wiretables::table.tr
                         id="row-{{ $row->getKey() }}"
                         wire:key="row-{{ $row->getKey() }}"
-                        :wire:sortable.item="method_exists($this, 'getUseSortProperty') ? $row->getKey() : null"
+                        :wire:sortable.item="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? $row->getKey() : null"
                     >
                         @foreach($this->columns as $column)
                             <x-wiretables::table.td
@@ -123,8 +139,16 @@
                 @empty
                     <x-wiretables::table.tr>
                         <x-wiretables::table.td class="whitespace-nowrap border-b border-gray-200" colspan="100">
-                            <div class="flex items-center text-gray-500 justify-center">
-                                @lang('wiretables::table.table_is_empty')
+                            <div class="flex flex-col gap-2 items-center text-gray-500 justify-center">
+                                <div>
+                                    @lang('wiretables::table.table_is_empty')
+                                </div>
+
+                                @if((method_exists($this, 'bootWithSearching') && $this->search) || (method_exists($this, 'bootWithFiltering') && $this->selectedFiltersCount > 0))
+                                    <div>
+                                        @lang('wiretables::table.reset_filters') <a href="" class="text-primary-700" @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')">@lang('wiretables::table.reset')</a>
+                                    </div>
+                                @endif
                             </div>
                         </x-wiretables::table.td>
                     </x-wiretables::table.tr>

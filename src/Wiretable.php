@@ -70,13 +70,13 @@ abstract class Wiretable extends Component implements TableContract
                 )
             )
             ->when(
-                method_exists($this, 'mountWithFiltering') && method_exists($this, 'notFilterable'),
+                method_exists($this, 'bootWithFiltering') && method_exists($this, 'notFilterable'),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->notFilterable()
                 )
             )
             ->when(
-                method_exists($this, 'mountWithSorting'),
+                method_exists($this, 'bootWithSorting'),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->currentSort($this->sort)
                 )
@@ -95,13 +95,13 @@ abstract class Wiretable extends Component implements TableContract
     {
         $builder = QueryBuilder::for($this->query(), $this->getRequest());
 
-        if (method_exists($this, 'mountWithFiltering')) {
+        if (method_exists($this, 'bootWithFiltering')) {
             $builder = $builder->allowedFilters(
                 $this->allowedFilters->toArray()
             );
         }
 
-        if (method_exists($this, 'mountWithSorting')) {
+        if (method_exists($this, 'bootWithSorting')) {
             $builder = $builder
                 ->defaultSort($this->getDefaultSort())
                 ->allowedSorts(

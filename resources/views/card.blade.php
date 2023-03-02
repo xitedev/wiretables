@@ -5,7 +5,7 @@
         </x-slot>
 
         <x-slot name="actions">
-            @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+            @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
                 <button
                     class="group h-full px-4 text-gray-400"
                     @click.prevent="$dispatch('toggle-filter')"

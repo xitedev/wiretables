@@ -110,7 +110,7 @@ trait WithButtons
     {
         $buttons = [];
 
-        if (method_exists($this, 'mountWithFiltering')) {
+        if (method_exists($this, 'bootWithFiltering')) {
             $buttons['fillFields'] = $this->getAllowedFiltersProperty()
                 ->filter(fn (FilterContract $filter) => $filter->canBeFilledOnCreate() && ! is_null($filter->value))
                 ->mapWithKeys(fn (FilterContract $filter) => [$filter->getName() => $filter->value])

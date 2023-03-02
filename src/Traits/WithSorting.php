@@ -3,20 +3,24 @@
 namespace Xite\Wiretables\Traits;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Xite\Wiretables\Contracts\ColumnContract;
 
 trait WithSorting
 {
     public string $sort = '-id';
-    protected static string $sortKey = 'sort';
+    public string $sortKey = 'sort';
 
-    public function hydrateWithSorting(): void
-    {
-        $this->setSort($this->sort);
-    }
+    public string $defaultSort = '-id';
 
-    public function mountWithSorting(): void
+    public function bootWithSorting(): void
     {
+        $defaultSort = Str::of($this->defaultSort)->replaceFirst('-', '');
+
+        $this->sort = $this->getAllowedSortsProperty()->contains($defaultSort)
+            ? $this->defaultSort
+            : $this->getAllowedSortsProperty()->first();
+
         $this->setSort($this->sort);
     }
 
@@ -25,7 +29,7 @@ trait WithSorting
         return [
             'sort' => [
                 'except' => $this->getDefaultSort(),
-                'as' => self::$sortKey,
+                'as' => $this->sortKey,
             ],
         ];
     }
@@ -39,7 +43,7 @@ trait WithSorting
     {
         $this->sort = (string) $sort;
 
-        $this->getRequest()->query->set(self::$sortKey, (string) $sort);
+        $this->getRequest()->query->set($this->sortKey, (string) $sort);
     }
 
     public function getAllowedSortsProperty(): Collection

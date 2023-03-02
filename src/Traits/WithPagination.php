@@ -8,12 +8,29 @@ trait WithPagination
 {
     public int $page = 1;
     public int $perPage = 25;
+
+    public int $defaultPerPage = 25;
+    public array $perPageOptions = [
+        10,
+        25,
+        50,
+        100
+    ];
+
     public bool $simplePagination = false;
-    protected static string $pageKey = 'page';
+    public string $pageKey = 'page';
 
     public function bootWithPagination(): void
     {
         $this->setPage($this->page);
+
+        $this->perPage = $this->defaultPerPage;
+
+        if (!in_array($this->defaultPerPage, $this->perPageOptions, true)) {
+            $this->perPageOptions[] = $this->defaultPerPage;
+
+            sort($this->perPageOptions);
+        }
 
         Paginator::currentPageResolver(fn () => $this->page);
 
@@ -26,8 +43,11 @@ trait WithPagination
         return [
             'page' => [
                 'except' => 1,
-                'as' => self::$pageKey,
+                'as' => $this->pageKey,
             ],
+            'perPage' => [
+                'except' => $this->defaultPerPage
+            ]
         ];
     }
 
@@ -58,7 +78,7 @@ trait WithPagination
 
     public function previousPage(): void
     {
-        if ($this->page === 1) {
+        if ($this->getPage() === 1) {
             return;
         }
 
