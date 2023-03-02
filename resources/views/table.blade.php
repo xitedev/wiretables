@@ -1,7 +1,7 @@
 <div class="max-w-full mx-auto">
     <x-wiretables::wiretable>
         <x-slot name="actions">
-            @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
+            @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
                 <button
                     class="relative p-2 text-gray-400 rounded-full group hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-200 transition ease-in-out duration-150"
                     @click.prevent="$dispatch('toggle-filter')"

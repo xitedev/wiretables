@@ -14,7 +14,13 @@ trait WithFiltering
     protected Collection $filters;
     protected static string $filterKey = 'filter';
 
-    public function bootWithFiltering(): void
+    public function hydrateWithFiltering(): void
+    {
+        $this->resolveFilters();
+        $this->updateFilters();
+    }
+
+    public function mountWithFiltering(): void
     {
         $this->resolveFilters();
         $this->updateFilters();

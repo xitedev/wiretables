@@ -1,6 +1,6 @@
 <div {{ $attributes->class('flex flex-col') }}>
     <div
-        @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
+        @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
             x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
         @toggle-filter.window="filtersAreShown = !filtersAreShown"
         @hide-filter.window="filtersAreShown = false"
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        @if(method_exists($this, 'bootWithFiltering') && $this->allowedFilters?->count())
+        @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
             <div
                 class="flex justify-between bg-white border border-gray-200 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                 x-show="filtersAreShown"
@@ -147,7 +147,7 @@
                                     @lang('wiretables::table.table_is_empty')
                                 </div>
 
-                                @if((method_exists($this, 'bootWithSearching') && $this->search) || (method_exists($this, 'bootWithFiltering') && $this->selectedFiltersCount > 0))
+                                @if((method_exists($this, 'bootWithSearching') && $this->search) || (method_exists($this, 'mountWithFiltering') && $this->selectedFiltersCount > 0))
                                     <div>
                                         @lang('wiretables::table.reset_filters') <a href="" class="text-primary-700" @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')">@lang('wiretables::table.reset')</a>
                                     </div>
