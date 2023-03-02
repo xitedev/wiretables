@@ -1,5 +1,5 @@
 <div class="flex items-center space-x-1">
-    <div @class(["rounded-full h-3.5 w-3.5 border-[3px] border-gray-500", $data->borderColor()])
+    <div @class(["rounded-full h-3.5 w-3.5 border-[3px]", $data->borderColor()])
          @if($popover || !$showText) x-tooltip.raw="{{ $popover ?? $data->title() }}" @endif
     ></div>
 
