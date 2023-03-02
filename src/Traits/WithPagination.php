@@ -17,6 +17,7 @@ trait WithPagination
         100
     ];
 
+    public bool $showPerPageOptions = true;
     public bool $simplePagination = false;
     public string $pageKey = 'page';
 

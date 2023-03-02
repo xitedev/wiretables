@@ -8,17 +8,19 @@
     >
         <div class="flex justify-between items-center content-center flex space-x-1 sm:space-x-2">
             <div class="flex space-x-2 items-center">
-                <label for="per-page" class="text-sm text-gray-500 hidden lg:block">{{ __('wiretables::table.per_page') }}</label>
-                <select
-                    id="per-page"
-                    class="block pl-2 w-16 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
-                    name="perPage"
-                    wire:model="perPage"
-                >
-                    @foreach($this->perPageOptions as $option)
-                        <option value="{{ $option }}" @selected($this->perPage)>{{ $option }}</option>
-                    @endforeach
-                </select>
+                @if($this->showPerPageOptions)
+                    <label for="per-page" class="text-sm text-gray-500 hidden lg:block">{{ __('wiretables::table.per_page') }}</label>
+                    <select
+                        id="per-page"
+                        class="block pl-2 w-16 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
+                        name="perPage"
+                        wire:model="perPage"
+                    >
+                        @foreach($this->perPageOptions as $option)
+                            <option value="{{ $option }}" @selected($this->perPage)>{{ $option }}</option>
+                        @endforeach
+                    </select>
+                @endif
             </div>
 
 
@@ -26,6 +28,7 @@
                 @isset($actions)
                     {{ $actions }}
                 @endif
+
                 @if(method_exists($this, 'bootWithSearching') && !$this->disableSearch)
                     <div class="lg:max-w-sm flex items-center py-2">
                         <label for="search" class="sr-only">{{ __('wiretables::table.search') }}</label>
@@ -101,7 +104,7 @@
 
     <div class="overflow-x-auto align-middle inline-block w-full">
         <x-wiretables::table>
-            @if($this->withHeader)
+            @if($this->columns->filter(fn ($column) => $column->renderTitle())->filter()->count())
                 <x-slot name="header">
                     <x-wiretables::table.tr>
                         @foreach($this->columns as $column)

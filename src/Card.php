@@ -11,10 +11,10 @@ use Xite\Wiretables\Traits\WithButtons;
 abstract class Card extends Wiretable
 {
     use WithButtons;
-    use WithActions;
 
     public bool $withHeader = false;
     public bool $withFooter = false;
+    public bool $showPerPageOptions = false;
     public int $perPage = 10;
 
     protected function getCreateButton(): ButtonContract
@@ -22,7 +22,7 @@ abstract class Card extends Wiretable
         return ModalButton::make('create')
             ->icon('heroicon-o-plus-circle')
             ->modal($this->createButton)
-            ->class('px-4 h-full !rounded-none')
+            ->class('!px-4 h-full !rounded-none !block')
             ->withParams(fn () => $this->getCreateButtonParams())
             ->displayIf(fn () => $this->can('create', $this->model));
     }
