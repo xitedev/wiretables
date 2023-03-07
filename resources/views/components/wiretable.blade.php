@@ -6,10 +6,10 @@
         @hide-filter.window="filtersAreShown = false"
         @endif
     >
-        <div class="flex justify-between items-center content-center flex space-x-1 sm:space-x-2">
-            <div class="flex space-x-2 items-center">
+        <div class="flex justify-end lg:justify-between items-center content-center flex space-x-1 sm:space-x-2">
+            <div class="space-x-2 items-center hidden lg:flex">
                 @if($this->showPerPageOptions)
-                    <label for="per-page" class="text-sm text-gray-500 hidden lg:block">{{ __('wiretables::table.per_page') }}</label>
+                    <label for="per-page" class="text-sm text-gray-500">{{ __('wiretables::table.per_page') }}</label>
                     <select
                         id="per-page"
                         class="block pl-2 w-16 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"

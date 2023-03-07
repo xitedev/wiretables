@@ -20,7 +20,15 @@ trait WithSorting
         $this->sort = $this->getAllowedSortsProperty()->contains($defaultSort)
             ? $this->defaultSort
             : $this->getAllowedSortsProperty()->first();
+    }
 
+    public function hydrateWithSorting(): void
+    {
+        $this->setSort($this->sort);
+    }
+
+    public function mountWithSorting(): void
+    {
         $this->setSort($this->sort);
     }
 
