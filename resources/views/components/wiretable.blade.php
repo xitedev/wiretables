@@ -6,7 +6,7 @@
         @hide-filter.window="filtersAreShown = false"
         @endif
     >
-        <div class="flex justify-end lg:justify-between items-center content-center flex space-x-1 sm:space-x-2">
+        <div class="flex justify-end lg:justify-between items-center content-center flex space-x-1 sm:space-x-2 mb-2">
             <div class="space-x-2 items-center hidden lg:flex">
                 @if($this->showPerPageOptions)
                     <label for="per-page" class="text-sm text-gray-500">{{ __('wiretables::table.per_page') }}</label>
@@ -30,7 +30,7 @@
                 @endif
 
                 @if(method_exists($this, 'bootWithSearching') && !$this->disableSearch)
-                    <div class="lg:max-w-sm flex items-center py-2">
+                    <div class="lg:max-w-sm flex items-center">
                         <label for="search" class="sr-only">{{ __('wiretables::table.search') }}</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">

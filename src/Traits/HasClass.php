@@ -26,40 +26,22 @@ trait HasClass
 
     public function toCenter(): self
     {
-        $this->class[] = 'text-center';
-
-        return $this;
+        return $this->class('text-center');
     }
 
     public function noWrap(): self
     {
-        $this->class[] = 'whitespace-nowrap';
-
-        return $this;
-    }
-
-    public function font(string $font): self
-    {
-        $this->class[] = "font-$font";
-
-        return $this;
+        return $this->class('whitespace-nowrap');
     }
 
     public function bold(): self
     {
-        return $this->font('bold');
-    }
-
-    public function text(string $text): self
-    {
-        $this->class[] = "text-$text";
-
-        return $this;
+        return $this->class('font-bold');
     }
 
     public function small(): self
     {
-        return $this->text('xs')->font('light');
+        return $this->class('text-xs font-light');
     }
 
     public function getClass($row): ?string
