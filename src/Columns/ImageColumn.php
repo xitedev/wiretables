@@ -3,14 +3,23 @@
 namespace Xite\Wiretables\Columns;
 
 use Illuminate\Contracts\View\View;
+use Xite\Wiretables\Traits\HasClass;
 
 class ImageColumn extends Column
 {
-    public ?string $thumbnail = null;
+    private ?string $thumbnail = null;
+    private ?string $innerClass = null;
 
     public function thumbnail(string $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function innerClass(string $innerClass): self
+    {
+        $this->innerClass = $innerClass;
 
         return $this;
     }
@@ -28,7 +37,7 @@ class ImageColumn extends Column
             return false;
         }
 
-        if (! method_exists($row, 'getFirstMediaUrl')) {
+        if (!$this->displayCallback && ! method_exists($row, 'getFirstMediaUrl')) {
             return false;
         }
 
@@ -44,6 +53,7 @@ class ImageColumn extends Column
                 'name' => $this->getName(),
                 'data' => $this->displayData($row),
                 'alt' => $row->getDisplayName(),
+                'innerClass' => $this->innerClass,
             ])
             ->render();
     }
