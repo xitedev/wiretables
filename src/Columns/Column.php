@@ -21,6 +21,7 @@ abstract class Column extends Component implements ColumnContract
 
     protected string $name;
     protected ?string $title = null;
+    protected ?string $titleIcon = null;
     protected ?int $width = null;
 
     protected bool $sortable = false;
@@ -43,6 +44,13 @@ abstract class Column extends Component implements ColumnContract
     public function title(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function titleIcon(string $titleIcon): self
+    {
+        $this->titleIcon = $titleIcon;
 
         return $this;
     }
@@ -92,6 +100,11 @@ abstract class Column extends Component implements ColumnContract
 
     public function getTitle(): ?string
     {
+        if ($this->titleIcon) {
+            return svg($this->titleIcon, 'h-5 w-5', ['x-tooltip.raw=\''.$this->title.'\''])
+                ->toHtml();
+        }
+
         return $this->title;
     }
 
