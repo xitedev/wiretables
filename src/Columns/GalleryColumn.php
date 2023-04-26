@@ -25,16 +25,14 @@ class GalleryColumn extends Column
 
     public function renderIt($row): ?string
     {
-        $media = $row->getMedia($this->collection);
-
         return $this
             ->render()
             ?->with([
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
                 'displayName' => $row->getDisplayName(),
-                'media' => $media,
-                'firstImage' => $media->first()->getUrl($this->hasThumbnail ? 'thumb' : ''),
+                'media' => $row->getMedia($this->collection),
+                'firstImage' => $row->getFirstMediaUrl($this->collection, $this->hasThumbnail ? 'thumb' : ''),
             ])
             ->render();
     }

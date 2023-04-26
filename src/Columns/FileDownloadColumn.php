@@ -15,6 +15,11 @@ class FileDownloadColumn extends Column
         return $this;
     }
 
+    protected function getValue($row)
+    {
+        return $row->getMedia($this->collection ?? $this->getName());
+    }
+
     public function renderIt($row): ?string
     {
         return $this
@@ -22,7 +27,7 @@ class FileDownloadColumn extends Column
             ?->with([
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
-                'data' => $row->getMedia($this->collection ?? $this->getName()),
+                'data' => $this->displayData($row),
             ])
             ->render();
     }
