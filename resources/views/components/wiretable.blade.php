@@ -2,8 +2,8 @@
     <div
         @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
             x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
-        @toggle-filter.window="filtersAreShown = !filtersAreShown"
-        @hide-filter.window="filtersAreShown = false"
+            @toggle-filter.window="filtersAreShown = !filtersAreShown"
+            @hide-filter.window="filtersAreShown = false"
         @endif
     >
         <div class="flex justify-end lg:justify-between items-center content-center flex space-x-1 sm:space-x-2 mb-2">

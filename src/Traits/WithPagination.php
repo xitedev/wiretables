@@ -62,14 +62,14 @@ trait WithPagination
         return 'wiretables::partials.simple-pagination';
     }
 
-    protected function resetPage(): void
-    {
-        $this->setPage(1);
-    }
-
     private function setPage($page): void
     {
         $this->page = (int) $page;
+    }
+
+    protected function resetPage(): void
+    {
+        $this->setPage(1);
     }
 
     public function gotoPage($page): void
@@ -79,7 +79,7 @@ trait WithPagination
 
     public function previousPage(): void
     {
-        if ($this->getPage() === 1) {
+        if ($this->page === 1) {
             return;
         }
 

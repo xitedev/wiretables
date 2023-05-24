@@ -36,6 +36,16 @@ trait WithButtons
         return true;
     }
 
+    public function deleteButton(): string
+    {
+        return DeleteModal::getName();
+    }
+
+    public function restoreButton(): string
+    {
+        return RestoreModal::getName();
+    }
+
     public function showRestoreButton(): bool
     {
         return method_exists($this->model, 'bootSoftDeletes');
@@ -82,7 +92,7 @@ trait WithButtons
                 fn ($buttons) => $buttons->push(
                     ModalButton::make('delete')
                         ->icon('heroicon-o-trash')
-                        ->modal(DeleteModal::getName())
+                        ->modal($this->deleteButton())
                         ->withParams(fn ($row) => [
                             'modelName' => get_class($row),
                             'modelId' => $row->getKey(),
@@ -95,7 +105,7 @@ trait WithButtons
                 fn ($buttons) => $buttons->push(
                     ModalButton::make('restore')
                         ->icon('heroicon-o-arrow-uturn-left')
-                        ->modal(RestoreModal::getName())
+                        ->modal($this->restoreButton())
                         ->withParams(fn ($row) => [
                             'modelName' => get_class($row),
                             'modelId' => $row->getKey(),
