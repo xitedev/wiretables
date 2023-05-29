@@ -114,9 +114,7 @@ trait WithFiltering
 
         $this->filters = $this->filters
             ->put($filter->getName(), $castedValue)
-            ->filter()
-            ->unique();
-
+            ->filter();
 
         if ($filter->hasRelatedFilters()) {
             $selectedFilters = $this->filters->intersectByKeys(
@@ -150,10 +148,6 @@ trait WithFiltering
         if ($filter->isFillable()) {
             $this->dispatchFilterUpdate($filter->getKebabName(), $value);
         }
-
-//        if ($this->filters->count()) {
-//            $this->dispatchBrowserEvent('show-filter');
-//        }
     }
 
     public function addFilter($key, $value): void
