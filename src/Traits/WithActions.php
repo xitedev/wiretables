@@ -15,7 +15,7 @@ trait WithActions
 
     public function getActionsProperty(): Collection
     {
-        return collect($this->actions())
+        return $this->actions()
             ->each(
                 fn (ActionContract $action) => $action->setModel($this->model)
             );
@@ -23,15 +23,15 @@ trait WithActions
 
     protected function getCheckboxColumn(): ?CheckboxColumn
     {
-        if (! count($this->actions())) {
+        if (! $this->actions()->count()) {
             return null;
         }
 
         return CheckboxColumn::make('checkbox');
     }
 
-    protected function actions(): array
+    protected function actions(): Collection
     {
-        return [];
+        return collect();
     }
 }

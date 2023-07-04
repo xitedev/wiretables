@@ -9,6 +9,7 @@ class SelectFilter extends Filter
 {
     private array $options = [];
     private bool $nullable = false;
+    protected ?string $keyBy = null;
 
     public function options(array $options): self
     {
@@ -29,6 +30,13 @@ class SelectFilter extends Filter
         return $this->options;
     }
 
+    public function keyBy(string $keyBy): self
+    {
+        $this->keyBy = $keyBy;
+
+        return $this;
+    }
+
 //    TODO: add multiple property
     public function render(): View
     {
@@ -38,11 +46,12 @@ class SelectFilter extends Filter
             showLabel: false,
             value: $this->getValue($this->value),
             options: $this->getOptions(),
-            nullable: $this->nullable
+            nullable: $this->nullable,
+            key: $this->keyBy,
+            emitUp: 'addFilter'
         )
             ->withAttributes([
-                "wire:change" => "addFilter('$this->name', \$event.target.value)",
-                "x-on:update-{$this->getKebabName()}.window" => "\$refs.input.value = event.detail.value; \$refs.input.dispatchEvent(new Event('change'))",
+                "x-on:update-{$this->getKebabName()}.window" => "event => { \$el.querySelectorAll('div[wire\\\\:id]').forEach((el) => window.Livewire.find(el.getAttribute('wire:id')).emitSelf('fillParent', event.detail.value, event.detail.trigger)) }",
             ])
             ->render();
     }

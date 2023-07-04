@@ -103,6 +103,7 @@ abstract class Filter extends AllowedFilter implements FilterContract
         return Str::of($this->getName())
             ->camel()
             ->kebab()
+            ->replace('.', '-')
             ->prepend('filter-')
             ->toString();
     }

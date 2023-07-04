@@ -96,7 +96,8 @@
                 x-transition:leave-end="opacity-0"
             >
                 @foreach($this->actions as $action)
-                    @livewire($action->getName(), ['model' => $action->getModel(), 'icon' => $action->getIcon(), 'title' => $action->getTitle(), 'size' => $action->getSize()], key($loop->index))
+                    {{ $action->getName() }}
+{{--                    @livewire($action->getName(), ['model' => $action->getModel(), 'icon' => $action->getIcon(), 'title' => $action->getTitle(), 'size' => $action->getSize()], key($loop->index))--}}
                 @endforeach
             </div>
         @endif
