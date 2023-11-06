@@ -9,6 +9,7 @@ class SelectFilter extends Filter
 {
     private array $options = [];
     private bool $nullable = false;
+    private bool $multiple = false;
     protected ?string $keyBy = null;
 
     public function options(array $options): self
@@ -21,6 +22,13 @@ class SelectFilter extends Filter
     public function nullable(): self
     {
         $this->nullable = true;
+
+        return $this;
+    }
+
+    public function multiple(): self
+    {
+        $this->multiple = true;
 
         return $this;
     }
@@ -47,6 +55,7 @@ class SelectFilter extends Filter
             value: $this->getValue($this->value),
             options: $this->getOptions(),
             nullable: $this->nullable,
+            multiple: $this->multiple,
             key: $this->keyBy,
             emitUp: 'addFilter'
         )

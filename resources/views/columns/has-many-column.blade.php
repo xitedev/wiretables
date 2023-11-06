@@ -21,7 +21,7 @@
             ])
             @if($showMoreRoute)
                 href="{{ $showMoreRoute }}"
-            target="_blank"
+                target="_blank"
             @endif
         >
             + {{ count($data) - $limit }}

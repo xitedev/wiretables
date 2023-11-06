@@ -124,11 +124,12 @@ abstract class Wiretable extends Component implements TableContract
             );
     }
 
+    abstract public function columns(): Collection;
+
     abstract public function render(): View;
 
     abstract public function getTitleProperty(): string;
 
     abstract protected function query(): Builder|Relation;
 
-    abstract protected function columns(): Collection;
 }
