@@ -38,12 +38,12 @@ trait WithButtons
 
     public function deleteButton(): string
     {
-        return DeleteModal::getName();
+        return 'xite.wiretables.modals.delete-modal';
     }
 
     public function restoreButton(): string
     {
-        return RestoreModal::getName();
+        return 'xite.wiretables.modals.restore-modal';
     }
 
     public function showRestoreButton(): bool

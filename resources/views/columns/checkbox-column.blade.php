@@ -1,4 +1,4 @@
-<div class="whitespace-nowrap inline-flex w-full items-center justify-center" x-data="{ value: false, id: '{{ $id }}' }" x-init="$watch('value', value => $dispatch('toggle-check', {id: id, value: value}) )">
+<div class="whitespace-nowrap inline-flex w-full items-center justify-center" x-data="{ value: false, id: '{{ $id }}' }" x-init="$watch('value', value => $dispatch('toggle-check', { id: id, value: value }) )">
     <x-wireforms-checkbox
         wire:model="selected"
         name="selected[]"

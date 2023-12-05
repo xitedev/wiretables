@@ -19,7 +19,7 @@
     </div>
     <div class="mt-5 sm:mt-4 sm:ml-10 sm:pl-4 sm:flex">
         <x-wireforms::button.secondary
-            wire:click="$emit('closeModal')"
+            wire:click="$dispatch('closeModal')"
             class="inline-flex justify-center w-full sm:w-auto"
             :title="__('wiretables::modals.close')"
         />

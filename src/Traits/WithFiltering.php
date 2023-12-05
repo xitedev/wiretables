@@ -4,6 +4,7 @@ namespace Xite\Wiretables\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Xite\Wiretables\Contracts\FilterContract;
 
 use Xite\Wiretables\Filters\TrashedFilter;
@@ -102,10 +103,7 @@ trait WithFiltering
 
     private function dispatchFilterUpdate($filter, $value, bool $trigger = false): void
     {
-        $this->dispatchBrowserEvent(
-            'update-' . $filter,
-            ['value' => $value, 'trigger' => $trigger]
-        );
+        $this->dispatch('update-' . $filter, value: $value, trigger: $trigger);
     }
 
     private function performFilterUpdate(FilterContract $filter, $value): void
@@ -134,7 +132,8 @@ trait WithFiltering
         $this->updateFilters();
     }
 
-    public function addFilterOutside($key, $value): void
+    #[On('addFilterOutside')]
+    public function addFilterOutside(string $key, $value): void
     {
         $filter = $this->filtersWithTrashed()
             ->first(fn (FilterContract $row) => $row->getName() === $key);
@@ -150,7 +149,8 @@ trait WithFiltering
         }
     }
 
-    public function addFilter($key, $value): void
+    #[On('addFilter')]
+    public function addFilter(string $key, $value): void
     {
         $filter = $this->filtersWithTrashed()
             ->first(fn (FilterContract $row) => $row->getName() === $key);

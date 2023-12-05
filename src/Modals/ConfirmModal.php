@@ -5,10 +5,12 @@ namespace Xite\Wiretables\Modals;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use LivewireUI\Modal\ModalComponent;
+use Xite\Wireforms\Traits\HasComponentName;
 
 abstract class ConfirmModal extends ModalComponent
 {
     use AuthorizesRequests;
+    use HasComponentName;
 
     abstract public function getTitleProperty(): string;
 

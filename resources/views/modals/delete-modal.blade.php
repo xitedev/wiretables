@@ -6,19 +6,15 @@
             </svg>
         </div>
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                @lang('wiretables::modals.delete_title')
-            </h3>
+            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">{{ $this->title }}</h3>
             <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                    @lang('wiretables::modals.delete_description')
-                </p>
+                <p class="text-sm text-gray-500">{{ $this->description }}</p>
             </div>
         </div>
     </div>
     <div class="mt-5 sm:mt-4 sm:ml-10 sm:pl-4 sm:flex">
         <x-wireforms::button.secondary
-            wire:click="$emit('closeModal')"
+            wire:click="$dispatch('closeModal')"
             class="inline-flex justify-center w-full sm:w-auto"
             :title="__('wiretables::modals.close')"
         />

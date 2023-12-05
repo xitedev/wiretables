@@ -12,7 +12,7 @@
            target="_blank"
            @elseif($showModal)
                href="#"
-           wire:click.prevent="$emit('openModal', '{{ $showModal }}', {{ json_encode(['model' => $value], JSON_THROW_ON_ERROR) }})"
+           wire:click.prevent="$dispatch('openModal', { component: '{{ $showModal }}', arguments: {{ json_encode(['model' => $value], JSON_THROW_ON_ERROR) }} })"
             @endif
         >
             {{ $data }}

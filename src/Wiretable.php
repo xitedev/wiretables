@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Xite\Searchable\Filters\SearchFilter;
 use Xite\Wiretables\Columns\Column;
@@ -27,11 +28,9 @@ abstract class Wiretable extends Component implements TableContract
 
     protected $listeners = [
         '$refresh',
-        'resetTable',
-        'addFilter',
-        'addFilterOutside',
     ];
 
+    #[On('resetTable')]
     public function resetTable(): void
     {
         $this->resetPage();

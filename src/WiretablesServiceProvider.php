@@ -23,7 +23,7 @@ class WiretablesServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        Livewire::component(DeleteModal::getName(), DeleteModal::class);
-        Livewire::component(RestoreModal::getName(), RestoreModal::class);
+        Livewire::component(DeleteModal::class);
+        Livewire::component(RestoreModal::class);
     }
 }

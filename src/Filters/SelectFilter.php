@@ -8,20 +8,13 @@ use Xite\Wireforms\Components\Fields\Select;
 class SelectFilter extends Filter
 {
     private array $options = [];
-    private bool $nullable = false;
+    protected $nullable = false;
     private bool $multiple = false;
     protected ?string $keyBy = null;
 
     public function options(array $options): self
     {
         $this->options = $options;
-
-        return $this;
-    }
-
-    public function nullable(): self
-    {
-        $this->nullable = true;
 
         return $this;
     }
@@ -60,7 +53,7 @@ class SelectFilter extends Filter
             emitUp: 'addFilter'
         )
             ->withAttributes([
-                "x-on:update-{$this->getKebabName()}.window" => "event => { \$el.querySelectorAll('div[wire\\\\:id]').forEach((el) => window.Livewire.find(el.getAttribute('wire:id')).emitSelf('fillParent', event.detail.value, event.detail.trigger)) }",
+                "x-on:update-{$this->getKebabName()}.window" => "event => { \$el.querySelectorAll('div[wire\\\\:id]').forEach((el) => window.Livewire.find(el.getAttribute('wire:id')).dispatch('fillParent', {value: event.detail.value, trigger: event.detail.trigger})) }",
             ])
             ->render();
     }
