@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Xite\Wiretables\Columns\IdColumn;
 use Xite\Wiretables\Table;
+use Livewire\Attributes\Computed;
 
 class {{ class }} extends Table
 {
@@ -20,7 +21,8 @@ class {{ class }} extends Table
         $this->authorize('viewAny', $this->model);
     }
 
-    public function getTitleProperty(): string
+    #[Computed]
+    public function getTitle(): string
     {
 //
     }

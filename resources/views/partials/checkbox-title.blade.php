@@ -1,6 +1,6 @@
 <div class="flex items-center" x-data="{ checkAll: false }">
     <x-wireforms-checkbox
-        wire:model="toggleAll"
+        wire:model.live="toggleAll"
         name="toggleAll"
         :show-label="false"
         key="toggle-all"

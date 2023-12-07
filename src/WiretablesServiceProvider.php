@@ -23,7 +23,7 @@ class WiretablesServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        Livewire::component(DeleteModal::class);
-        Livewire::component(RestoreModal::class);
+        Livewire::component('xite.wiretables.modals.delete-modal', DeleteModal::class);
+        Livewire::component('xite.wiretables.modals.restore-modal', RestoreModal::class);
     }
 }

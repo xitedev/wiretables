@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Computed;
 use LivewireUI\Modal\ModalComponent;
 
 class DeleteModal extends ConfirmModal
@@ -16,7 +17,8 @@ class DeleteModal extends ConfirmModal
     public int $modelId;
     public Model $model;
 
-    public function getTitleProperty(): string
+    #[Computed]
+    public function title(): string
     {
         return __('wiretables::modals.delete_title');
     }

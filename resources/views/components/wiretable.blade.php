@@ -15,7 +15,7 @@
                             id="per-page"
                             class="block pl-2 w-16 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                             name="perPage"
-                            wire:model="perPage"
+                            wire:model.live="perPage"
                         >
                             @foreach($this->perPageOptions as $option)
                                 <option value="{{ $option }}" @selected($this->perPage)>{{ $option }}</option>
@@ -52,7 +52,7 @@
                                         <input name="strict"
                                                type="checkbox"
                                                class="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary-500 checked:border-primary-500 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
-                                               wire:model="strict"
+                                               wire:model.live="strict"
                                         >
                                     </div>
                                 @endunless
@@ -107,10 +107,10 @@
 
     <div class="overflow-x-auto align-middle inline-block w-full">
         <x-wiretables::table>
-            @if($this->columns->filter(fn ($column) => $column->renderTitle())->filter()->count())
+            @if($this->getColumns->filter(fn ($column) => $column->renderTitle())->filter()->count())
                 <x-slot name="header">
                     <x-wiretables::table.tr>
-                        @foreach($this->columns as $column)
+                        @foreach($this->getColumns as $column)
                             <x-wiretables::table.th wire:key="title-{{ $loop->index }}" style="width: {{ $column->getWidth() }};">
                                 {!! $column->renderTitle() !!}
                             </x-wiretables::table.th>
@@ -125,13 +125,13 @@
                     :wire:sortable="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? 'updateRowSort' : null"
                     :wire:sortable.options="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? '{ animation: 100 }' : null"
             >
-                @forelse($this->data->items() as $row)
+                @forelse($this->getData->items() as $row)
                     <x-wiretables::table.tr
                         id="row-{{ $row->getKey() }}"
                         wire:key="row-{{ $row->getKey() }}"
                         :wire:sortable.item="(method_exists($this, 'getUseSortProperty') && $this->useSort) ? $row->getKey() : null"
                     >
-                        @foreach($this->columns as $column)
+                        @foreach($this->getColumns as $column)
                             <x-wiretables::table.td
                                 :class="$column->getClass($row)"
                                 wire:key="p-column-{{ $row->getKey() }}-{{ $loop->index }}"
@@ -164,6 +164,6 @@
     </div>
 
     <div class="w-full overflow-x-auto">
-        {{ $this->data->links() }}
+        {{ $this->getData->links() }}
     </div>
 </div>

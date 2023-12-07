@@ -23,8 +23,8 @@ abstract class Table extends Wiretable
     {
         return view('wiretables::table')
             ->layout($this->layout ?? config('wiretables.layout'))
+            ->title($this->title)
             ->layoutData([
-                'title' => $this->getTitleProperty(),
                 'buttons' =>  $this->globalButtons
                     ->map(fn ($button) => $button->renderIt()->render())
                     ->implode("\r\n")

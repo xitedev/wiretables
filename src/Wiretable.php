@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Xite\Searchable\Filters\SearchFilter;
@@ -57,7 +58,8 @@ abstract class Wiretable extends Component implements TableContract
         return $this->request;
     }
 
-    public function getColumnsProperty(): Collection
+    #[Computed]
+    public function getColumns(): Collection
     {
         return $this->columns()
             ->filter(fn ($column) => $column instanceof ColumnContract)
@@ -90,7 +92,8 @@ abstract class Wiretable extends Component implements TableContract
             );
     }
 
-    public function getDataProperty()
+    #[Computed]
+    public function getData()
     {
         $builder = QueryBuilder::for($this->query(), $this->getRequest());
 
@@ -115,19 +118,14 @@ abstract class Wiretable extends Component implements TableContract
                 );
         }
 
-        return $builder
-            ->when(
-                $this->simplePagination === true,
-                fn (Builder $query) => $query->simplePaginate($this->perPage),
-                fn (Builder $query) => $query->paginate($this->perPage)->onEachSide(1)
-            );
+        return $builder->paginate($this->perPage)->onEachSide(1);
     }
 
     abstract public function columns(): Collection;
 
     abstract public function render(): View;
 
-    abstract public function getTitleProperty(): string;
+    abstract public function title(): string;
 
     abstract protected function query(): Builder|Relation;
 

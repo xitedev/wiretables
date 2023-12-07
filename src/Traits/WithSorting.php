@@ -4,42 +4,35 @@ namespace Xite\Wiretables\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
 use Xite\Wiretables\Contracts\ColumnContract;
 
 trait WithSorting
 {
-    public string $sort = '-id';
-    public string $sortKey = 'sort';
-
     public string $defaultSort = '-id';
+
+    public $sorts = [];
+
+    public function queryStringWithSorting()
+    {
+        return collect($this->sorts)
+            ->mapWithKeys(fn ($sort, $sortName) => [
+                'sorts.'.$sortName => [
+                    'history' => true,
+                    'as' => $sortName,
+                    'keep' => false
+                ]
+            ])
+            ->toArray();
+    }
 
     public function bootWithSorting(): void
     {
-        $defaultSort = Str::of($this->defaultSort)->replaceFirst('-', '');
+        $defaultSort = Str::of($this->defaultSort)->replaceStart('-', '');
 
-        $this->sort = $this->getAllowedSortsProperty()->contains($defaultSort)
+        $this->sort = $this->allowedSorts->contains($defaultSort)
             ? $this->defaultSort
-            : $this->getAllowedSortsProperty()->first();
-    }
-
-    public function hydrateWithSorting(): void
-    {
-        $this->setSort($this->sort);
-    }
-
-    public function mountWithSorting(): void
-    {
-        $this->setSort($this->sort);
-    }
-
-    public function queryStringWithSorting(): array
-    {
-        return [
-            'sort' => [
-                'except' => $this->getDefaultSort(),
-                'as' => $this->sortKey,
-            ],
-        ];
+            : $this->allowedSorts->first();
     }
 
     protected function resetSort(): void
@@ -47,28 +40,29 @@ trait WithSorting
         $this->setSort($this->getDefaultSort());
     }
 
-    private function setSort($sort): void
+    private function setSort(string $sort, string $sortName = 'sort'): void
     {
-        $this->sort = (string) $sort;
+        $this->sorts[$sortName] = $sort;
 
-        $this->getRequest()->query->set($this->sortKey, (string) $sort);
+        $this->getRequest()->query->set($sortName, $sort);
     }
 
-    public function getAllowedSortsProperty(): Collection
+    #[Computed(persist: true)]
+    public function allowedSorts(): Collection
     {
         return $this->columns()
-                ->filter(fn (ColumnContract $column) => $column->isSortable())
-                ->map(fn (ColumnContract $column) => $column->getSortableField())
-                ->values();
+            ->filter(fn (ColumnContract $column) => $column->isSortable())
+            ->map(fn (ColumnContract $column) => $column->getSortableField())
+            ->values();
     }
 
     public function sortBy($columnName): void
     {
-        $this->setSort(
-            ($this->sort !== $columnName)
-                ? $columnName
-                : sprintf('-%s', $columnName)
-        );
+        $sortBy = ($this->sort !== $columnName)
+            ? $columnName
+            : sprintf('-%s', $columnName);
+
+        $this->setSort($sortBy);
 
         if (method_exists($this, 'resetPage')) {
             $this->resetPage();

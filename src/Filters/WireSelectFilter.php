@@ -104,7 +104,7 @@ class WireSelectFilter extends Filter
             emitUp: 'addFilter'
         )
             ->withAttributes([
-                "x-on:update-{$this->getKebabName()}.window" => "event => { \$el.querySelectorAll('div[wire\\\\:id]').forEach((el) => window.Livewire.find(el.getAttribute('wire:id')).dispatchSelf('fillParent', {value: event.detail.value, trigger: event.detail.trigger})) }",
+                "x-on:update-{$this->getKebabName()}.window" => "event => { \$el.querySelectorAll('div[wire\\\\:id]').forEach((el) => window.Livewire.find(el.getAttribute('wire:id')).dispatch('fillParent', {value: event.detail.value, trigger: event.detail.trigger})) }",
             ])
             ->render();
     }

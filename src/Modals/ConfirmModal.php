@@ -12,7 +12,7 @@ abstract class ConfirmModal extends ModalComponent
     use AuthorizesRequests;
     use HasComponentName;
 
-    abstract public function getTitleProperty(): string;
+    abstract public function title(): string;
 
     public function getDescriptionProperty(): string
     {
