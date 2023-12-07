@@ -2,10 +2,8 @@
 
 namespace Xite\Wiretables;
 
-use Livewire\ComponentHookRegistry;
 use Livewire\Livewire;
 use Xite\Wiretables\Commands\TableMakeCommand;
-use Xite\Wiretables\Features\SupportSorting\SupportSorting;
 use Xite\Wiretables\Modals\DeleteModal;
 use Xite\Wiretables\Modals\RestoreModal;
 use Spatie\LaravelPackageTools\Package;
@@ -28,10 +26,5 @@ class WiretablesServiceProvider extends PackageServiceProvider
         Livewire::component('xite.wiretables.modals.delete-modal', DeleteModal::class);
         Livewire::component('xite.wiretables.modals.restore-modal', RestoreModal::class);
 
-    }
-
-    public function bootingPackage()
-    {
-        ComponentHookRegistry::register(SupportSorting::class);
     }
 }
