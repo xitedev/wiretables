@@ -92,8 +92,6 @@ trait WithSorting
     {
         $this->sorts[$sortName] = $sort;
 
-        ray($this->sorts);
-
         $this->getRequest()->query->set($sortName, $sort);
     }
 
@@ -113,13 +111,9 @@ trait WithSorting
 
     public function sortBy($columnName): void
     {
-        ray($this->getSort());
-
         $sortBy = ($this->getSort() !== $columnName)
             ? $columnName
             : sprintf('-%s', $columnName);
-
-        ray($sortBy);
 
         $this->setSort($sortBy);
 
