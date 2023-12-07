@@ -76,7 +76,7 @@ trait WithSorting
         $this->setPropertyAttribute($key, new BaseUrl(as: $alias, history: $history, keep: $keep));
     }
 
-    private function resetSort(): void
+    public function resetSort(): void
     {
         $this->setSort($this->getDefaultSort());
     }
