@@ -5,6 +5,9 @@ namespace Xite\Wiretables\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
+use Livewire\ComponentHookRegistry;
+use Livewire\Features\SupportQueryString\BaseUrl;
+use Livewire\Features\SupportQueryString\SupportQueryString;
 use Xite\Wiretables\Contracts\ColumnContract;
 
 trait WithSorting
@@ -13,14 +16,15 @@ trait WithSorting
 
     public $sorts = [];
 
-    public function queryStringWithSorting()
+    public function queryStringWithSorting(): array
     {
         return collect($this->sorts)
             ->mapWithKeys(fn ($sort, $sortName) => [
                 'sorts.'.$sortName => [
                     'history' => true,
                     'as' => $sortName,
-                    'keep' => false
+                    'keep' => false,
+                    'except' => $this->getDefaultSort()
                 ]
             ])
             ->toArray();
@@ -28,23 +32,74 @@ trait WithSorting
 
     public function bootWithSorting(): void
     {
-        $defaultSort = Str::of($this->defaultSort)->replaceStart('-', '');
-
-        $this->sort = $this->allowedSorts->contains($defaultSort)
-            ? $this->defaultSort
-            : $this->allowedSorts->first();
+        $this->ensureSorterIsInitialized();
     }
 
-    protected function resetSort(): void
+    private function ensureSorterIsInitialized($sortName = 'sort'): void
+    {
+        if (isset($this->sorts[$sortName])) return;
+
+        $queryStringDetails = $this->getQueryStringDetails($sortName);
+
+        $defaultSort = $this->allowedSorts->contains(Str::of($this->defaultSort)->replaceStart('-', ''))
+            ? $this->defaultSort
+            : $this->allowedSorts->first();
+
+        $this->sorts[$sortName] = $this->resolveSort($queryStringDetails['as'], $defaultSort);
+
+        $this->addUrlHook($sortName, $queryStringDetails);
+    }
+
+    private function getQueryStringDetails($sortName)
+    {
+        $sortNameQueryString = data_get($this->getQueryString(), 'sorts.' . $sortName);
+
+        $sortNameQueryString['as'] ??= $sortName;
+        $sortNameQueryString['history'] ??= true;
+        $sortNameQueryString['keep'] ??= false;
+
+        return $sortNameQueryString;
+    }
+
+    private function resolveSort($alias, $default)
+    {
+        return request()->query($alias, $default);
+    }
+
+    private function addUrlHook($sortName, $queryStringDetails)
+    {
+        $key = 'sorts.' . $sortName;
+        $alias = $queryStringDetails['as'];
+        $history = $queryStringDetails['history'];
+        $keep = $queryStringDetails['keep'];
+
+        $this->setPropertyAttribute($key, new BaseUrl(as: $alias, history: $history, keep: $keep));
+    }
+
+    private function resetSort(): void
     {
         $this->setSort($this->getDefaultSort());
+    }
+
+    private function getQueryString()
+    {
+        $supportQueryStringHook = ComponentHookRegistry::getHook($this, SupportQueryString::class);
+
+        return $supportQueryStringHook->getQueryString();
     }
 
     private function setSort(string $sort, string $sortName = 'sort'): void
     {
         $this->sorts[$sortName] = $sort;
 
+        ray($this->sorts);
+
         $this->getRequest()->query->set($sortName, $sort);
+    }
+
+    public function getSort($sortName = 'sort')
+    {
+        return $this->sorts[$sortName];
     }
 
     #[Computed(persist: true)]
@@ -58,9 +113,13 @@ trait WithSorting
 
     public function sortBy($columnName): void
     {
-        $sortBy = ($this->sort !== $columnName)
+        ray($this->getSort());
+
+        $sortBy = ($this->getSort() !== $columnName)
             ? $columnName
             : sprintf('-%s', $columnName);
+
+        ray($sortBy);
 
         $this->setSort($sortBy);
 

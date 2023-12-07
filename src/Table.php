@@ -12,10 +12,10 @@ use Xite\Wiretables\Traits\WithSorting;
 abstract class Table extends Wiretable
 {
     use WithFiltering;
-    use WithSorting;
     use WithSearching;
     use WithButtons;
     use WithActions;
+    use WithSorting;
 
     public ?string $layout = null;
 

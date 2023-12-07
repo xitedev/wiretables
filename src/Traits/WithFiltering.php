@@ -4,6 +4,7 @@ namespace Xite\Wiretables\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Xite\Wiretables\Contracts\FilterContract;
 
@@ -31,8 +32,10 @@ trait WithFiltering
     {
         return [
             'filter' => [
+                'history' => true,
                 'except' => '',
                 'as' => self::$filterKey,
+                'keep' => false
             ],
         ];
     }
@@ -180,7 +183,8 @@ trait WithFiltering
             );
     }
 
-    public function getAllowedFiltersProperty(): Collection
+    #[Computed]
+    public function allowedFilters(): Collection
     {
         return $this->filtersWithTrashed()
             ->each(
@@ -191,7 +195,8 @@ trait WithFiltering
             );
     }
 
-    public function getSelectedFiltersCountProperty(): int
+    #[Computed]
+    public function selectedFiltersCount(): int
     {
         return $this->filters->count();
     }

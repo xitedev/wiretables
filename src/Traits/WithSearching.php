@@ -18,8 +18,10 @@ trait WithSearching
     {
         return [
             'search' => [
+                'history' => true,
                 'except' => '',
                 'as' => self::$searchKey,
+                'keep' => false
             ],
             'strict' => [
                 'except' => false,

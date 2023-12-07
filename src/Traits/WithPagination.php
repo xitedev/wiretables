@@ -3,7 +3,6 @@
 namespace Xite\Wiretables\Traits;
 
 use Illuminate\Pagination\Paginator;
-use Livewire\Features\SupportPagination\HandlesPagination;
 
 trait WithPagination
 {
@@ -22,18 +21,6 @@ trait WithPagination
 
     public function bootWithPagination(): void
     {
-//        $this->setPage($this->page);
-//
-//        $this->perPage = $this->defaultPerPage;
-//
-//        if (!in_array($this->defaultPerPage, $this->perPageOptions, true)) {
-//            $this->perPageOptions[] = $this->defaultPerPage;
-//
-//            sort($this->perPageOptions);
-//        }
-//
-//        Paginator::currentPageResolver(fn () => $this->page);
-
         Paginator::defaultView('wiretables::partials.pagination');
     }
 }

@@ -79,7 +79,7 @@ abstract class Wiretable extends Component implements TableContract
             ->when(
                 method_exists($this, 'bootWithSorting'),
                 fn (Collection $rows) => $rows->each(
-                    fn (Column $column) => $column->currentSort($this->sort)
+                    fn (Column $column) => $column->currentSort($this->getSort())
                 )
             )
             ->when(
