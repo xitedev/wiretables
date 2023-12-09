@@ -2,7 +2,7 @@
     @if($this->showPerPageOptions || (method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count()) || method_exists($this, 'bootWithActions') || (method_exists($this, 'bootWithSearching') && !$this->disableSearch))
         <div
             @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
-                x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
+            x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
             @toggle-filter.window="filtersAreShown = !filtersAreShown"
             @hide-filter.window="filtersAreShown = false"
             @endif

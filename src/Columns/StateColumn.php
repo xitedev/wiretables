@@ -3,10 +3,12 @@
 namespace Xite\Wiretables\Columns;
 
 use Illuminate\Contracts\View\View;
+use Xite\Wiretables\Traits\HasFilterable;
 use Xite\Wiretables\Traits\HasPopover;
 
 class StateColumn extends Column
 {
+    use HasFilterable;
     use HasPopover;
 
     private bool $paintOverText = false;
@@ -36,15 +38,22 @@ class StateColumn extends Column
             return $this->getValue($row);
         }
 
+        $filter = $this->getFilterableField($row);
+        $data = $this->displayData($row);
+
         return $this
             ->render()
             ?->with([
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
-                'data' => $this->displayData($row),
+                'data' => $data,
                 'popover' => $this->getPopover($row),
                 'paintOverText' => $this->paintOverText,
                 'showText' => $this->showText,
+                'filter' => $filter,
+                'filterValue' => $this->getName() !== $filter
+                    ? $row->{$filter}
+                    : $data?->getValue(),
             ])
             ->render();
     }

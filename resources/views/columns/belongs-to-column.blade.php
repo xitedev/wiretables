@@ -9,10 +9,10 @@
         <a class="group inline-flex items-center space-x-1 truncate text-sm leading-5 transition ease-in-out duration-150"
            @if($route)
                href="{{ $route }}"
-           target="_blank"
+               target="_blank"
            @elseif($showModal)
                href="#"
-           wire:click.prevent="$dispatch('openModal', { component: '{{ $showModal }}', arguments: {{ json_encode(['model' => $value], JSON_THROW_ON_ERROR) }} })"
+               wire:click.prevent="$dispatch('openModal', { component: '{{ $showModal }}', arguments: {{ json_encode(['model' => $value], JSON_THROW_ON_ERROR) }} })"
             @endif
         >
             {{ $data }}
