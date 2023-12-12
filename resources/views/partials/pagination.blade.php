@@ -11,8 +11,8 @@
 @endphp
 
 <div class="bg-white px-4 py-3 flex border-x border-b border-gray-200 items-center justify-between sm:px-6">
-    @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="w-full flex items-center justify-between">
+    <nav role="navigation" aria-label="Pagination Navigation" class="w-full flex items-center justify-between">
+        @if ($paginator->hasPages())
             <div class="flex justify-between flex-1 sm:hidden">
                 <span>
                     @if ($paginator->onFirstPage())
@@ -38,15 +38,17 @@
                     @endif
                 </span>
             </div>
+        @endif
 
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700 leading-5">
-                        @lang('wiretables::table.total', ['from' => $paginator->firstItem() ?? 0, 'to' => $paginator->lastItem() ?? 0, 'total' => $paginator->total()])
-                    </p>
-                </div>
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm text-gray-700 leading-5">
+                    @lang('wiretables::table.total', ['from' => $paginator->firstItem() ?? 0, 'to' => $paginator->lastItem() ?? 0, 'total' => $paginator->total()])
+                </p>
+            </div>
 
-                <div>
+            <div>
+                @if ($paginator->hasPages())
                     <span class="relative z-0 inline-flex">
                         <span>
                             {{-- Previous Page Link --}}
@@ -113,8 +115,8 @@
                             @endif
                         </span>
                     </span>
-                </div>
+                @endif
             </div>
-        </nav>
-    @endif
+        </div>
+    </nav>
 </div>
