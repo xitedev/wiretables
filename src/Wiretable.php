@@ -11,6 +11,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Xite\Searchable\Filters\SearchFilter;
+use Xite\Wireforms\Traits\HandleRefreshAfterSave;
 use Xite\Wiretables\Columns\Column;
 use Xite\Wiretables\Contracts\ColumnContract;
 use Xite\Wiretables\Contracts\TableContract;
@@ -18,14 +19,15 @@ use Xite\Wiretables\Traits\WithActions;
 use Xite\Wiretables\Traits\WithButtons;
 use Xite\Wiretables\Traits\WithFiltering;
 use Xite\Wiretables\Traits\WithPagination;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\QueryBuilderRequest;
 use Xite\Wiretables\Traits\WithSearching;
 use Xite\Wiretables\Traits\WithSorting;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\QueryBuilderRequest;
 
 abstract class Wiretable extends Component implements TableContract
 {
     use WithPagination;
+    use HandleRefreshAfterSave;
 
     public ?Model $model = null;
     public bool $withHeader = true;
@@ -54,12 +56,6 @@ abstract class Wiretable extends Component implements TableContract
         if (in_array(WithSearching::class, class_uses_recursive($this))) {
             $this->resetSearch();
         }
-    }
-
-    #[On('refreshTable')]
-    public function refreshTable(): void
-    {
-        return;
     }
 
     public function getRequest(): QueryBuilderRequest
