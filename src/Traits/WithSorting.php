@@ -21,7 +21,6 @@ trait WithSorting
         return collect($this->sorts)
             ->mapWithKeys(fn ($sort, $sortName) => [
                 'sorts.'.$sortName => [
-                    'history' => true,
                     'as' => $sortName,
                     'keep' => false,
                     'except' => $this->getDefaultSort()
@@ -33,6 +32,7 @@ trait WithSorting
     public function bootWithSorting(): void
     {
         $this->ensureSorterIsInitialized();
+        $this->updateSorts();
     }
 
     private function ensureSorterIsInitialized($sortName = 'sort'): void
@@ -48,6 +48,11 @@ trait WithSorting
         $this->sorts[$sortName] = $this->resolveSort($queryStringDetails['as'], $defaultSort);
 
         $this->addUrlHook($sortName, $queryStringDetails);
+    }
+
+    private function updateSorts($sortName = 'sort'): void
+    {
+        $this->getRequest()->query->set($sortName, $this->sorts[$sortName]);
     }
 
     private function getQueryStringDetails($sortName)

@@ -4,7 +4,7 @@ namespace Xite\Wiretables\Traits;
 
 trait WithSearching
 {
-    public string $search = '';
+    public string $searchString = '';
     public bool $disableSearch = false;
     public bool $disableStrict = false;
     public bool $strict = false;
@@ -17,8 +17,7 @@ trait WithSearching
     public function queryStringWithSearching(): array
     {
         return [
-            'search' => [
-                'history' => true,
+            'searchString' => [
                 'except' => '',
                 'as' => self::$searchKey,
                 'keep' => false
@@ -31,7 +30,7 @@ trait WithSearching
 
     protected function resetSearch(): void
     {
-        $this->search = '';
+        $this->searchString = '';
         $this->strict = false;
     }
 

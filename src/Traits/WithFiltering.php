@@ -32,7 +32,6 @@ trait WithFiltering
     {
         return [
             'filter' => [
-                'history' => true,
                 'except' => '',
                 'as' => self::$filterKey,
                 'keep' => false

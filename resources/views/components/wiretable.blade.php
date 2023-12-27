@@ -43,8 +43,8 @@
                                     id="search"
                                     placeholder="{{ __('wiretables::table.search') }}"
                                     type="search"
-                                    value="{{ $this->search }}"
-                                    wire:model.live.debounce.1000ms="search"
+                                    value="{{ $this->searchString }}"
+                                    wire:model.live.debounce.1000ms="searchString"
                                     class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                                 >
                                 @unless($this->disableStrict)
@@ -150,7 +150,7 @@
                                     @lang('wiretables::table.table_is_empty')
                                 </div>
 
-                                @if((method_exists($this, 'bootWithSearching') && $this->search) || (method_exists($this, 'mountWithFiltering') && $this->selectedFiltersCount > 0))
+                                @if((method_exists($this, 'bootWithSearching') && $this->searchString) || (method_exists($this, 'mountWithFiltering') && $this->selectedFiltersCount > 0))
                                     <div>
                                         @lang('wiretables::table.reset_filters') <a href="" class="text-primary-700" @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')">@lang('wiretables::table.reset')</a>
                                     </div>

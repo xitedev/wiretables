@@ -8,6 +8,7 @@ use Xite\Wiretables\Traits\WithButtons;
 use Xite\Wiretables\Traits\WithFiltering;
 use Xite\Wiretables\Traits\WithSearching;
 use Xite\Wiretables\Traits\WithSorting;
+use function Livewire\store;
 
 abstract class Table extends Wiretable
 {

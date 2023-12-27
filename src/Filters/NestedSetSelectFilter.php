@@ -4,9 +4,9 @@ namespace Xite\Wiretables\Filters;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Xite\Wireforms\Components\Fields\WireSelect;
+use Xite\Wireforms\Components\Fields\NestedSetSelect;
 
-class WireSelectFilter extends Filter
+class NestedSetSelectFilter extends Filter
 {
     private ?string $model = null;
     protected bool $searchable = false;
@@ -76,7 +76,7 @@ class WireSelectFilter extends Filter
 
     public function render(): View
     {
-        return WireSelect::make(
+        return NestedSetSelect::make(
             name: $this->getName(),
             placeholder: $this->getPlaceholder(),
             showLabel: false,

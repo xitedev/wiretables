@@ -14,9 +14,14 @@ use Xite\Searchable\Filters\SearchFilter;
 use Xite\Wiretables\Columns\Column;
 use Xite\Wiretables\Contracts\ColumnContract;
 use Xite\Wiretables\Contracts\TableContract;
+use Xite\Wiretables\Traits\WithActions;
+use Xite\Wiretables\Traits\WithButtons;
+use Xite\Wiretables\Traits\WithFiltering;
 use Xite\Wiretables\Traits\WithPagination;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\QueryBuilderRequest;
+use Xite\Wiretables\Traits\WithSearching;
+use Xite\Wiretables\Traits\WithSorting;
 
 abstract class Wiretable extends Component implements TableContract
 {
@@ -34,19 +39,27 @@ abstract class Wiretable extends Component implements TableContract
     #[On('resetTable')]
     public function resetTable(): void
     {
-        $this->resetPage();
+        if (in_array(WithPagination::class, class_uses_recursive($this))) {
+            $this->resetPage();
+        }
 
-        if (method_exists($this, 'resetFilter')) {
+        if (in_array(WithFiltering::class, class_uses_recursive($this))) {
             $this->resetFilter();
         }
 
-        if (method_exists($this, 'resetSort')) {
+        if (in_array(WithSorting::class, class_uses_recursive($this))) {
             $this->resetSort();
         }
 
-        if (method_exists($this, 'resetSearch')) {
+        if (in_array(WithSearching::class, class_uses_recursive($this))) {
             $this->resetSearch();
         }
+    }
+
+    #[On('refreshTable')]
+    public function refreshTable(): void
+    {
+        return;
     }
 
     public function getRequest(): QueryBuilderRequest
@@ -65,29 +78,29 @@ abstract class Wiretable extends Component implements TableContract
             ->filter(fn ($column) => $column instanceof ColumnContract)
             ->filter(fn ($column) => $column->canRender)
             ->when(
-                method_exists($this, 'bootWithSearching') && $this->search,
+                in_array(WithSearching::class, class_uses_recursive($this)) && $this->searchString,
                 fn (Collection $rows) => $rows->each(
-                    fn (Column $column) => $column->highlight($this->search)
+                    fn (Column $column) => $column->highlight($this->searchString)
                 )
             )
             ->when(
-                method_exists($this, 'mountWithFiltering') && method_exists($this, 'notFilterable'),
+                in_array(WithFiltering::class, class_uses_recursive($this)) && method_exists($this, 'notFilterable'),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->notFilterable()
                 )
             )
             ->when(
-                method_exists($this, 'bootWithSorting'),
+                in_array(WithSorting::class, class_uses_recursive($this)),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->currentSort($this->getSort())
                 )
             )
             ->when(
-                method_exists($this, 'bootWithButtons') && $actionColumn = $this->getActionColumn(),
+                in_array(WithButtons::class, class_uses_recursive($this)) && $actionColumn = $this->getActionColumn(),
                 fn (Collection $rows) => $rows->push($actionColumn)
             )
             ->when(
-                method_exists($this, 'bootWithActions') && $checkboxColumn = $this->getCheckboxColumn(),
+                in_array(WithActions::class, class_uses_recursive($this)) && $checkboxColumn = $this->getCheckboxColumn(),
                 fn (Collection $rows) => $rows->prepend($checkboxColumn)
             );
     }
@@ -97,13 +110,13 @@ abstract class Wiretable extends Component implements TableContract
     {
         $builder = QueryBuilder::for($this->query(), $this->getRequest());
 
-        if (method_exists($this, 'mountWithFiltering')) {
+        if (in_array(WithFiltering::class, class_uses_recursive($this))) {
             $builder = $builder->allowedFilters(
                 $this->allowedFilters->toArray()
             );
         }
 
-        if (method_exists($this, 'bootWithSorting')) {
+        if (in_array(WithSorting::class, class_uses_recursive($this))) {
             $builder = $builder
                 ->defaultSort($this->getDefaultSort())
                 ->allowedSorts(
@@ -111,10 +124,10 @@ abstract class Wiretable extends Component implements TableContract
                 );
         }
 
-        if (method_exists($this, 'bootWithSearching') && (! $this->disableSearch && $this->search)) {
+        if (in_array(WithSearching::class, class_uses_recursive($this)) && (! $this->disableSearch && $this->searchString)) {
             $builder = $builder
                 ->tap(
-                    new SearchFilter($this->search, $this->strict)
+                    new SearchFilter($this->searchString, $this->strict)
                 );
         }
 
