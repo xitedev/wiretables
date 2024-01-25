@@ -199,4 +199,13 @@ trait WithFiltering
     {
         return $this->filters->count();
     }
+
+    public function hasFilter(string $filter, mixed $value = null): bool
+    {
+        if (!isset($this->filters[$filter])) {
+            return false;
+        }
+
+        return is_null($value) || $this->filters[$filter] === $value;
+    }
 }
