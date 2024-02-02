@@ -18,7 +18,7 @@ trait WithSortableColumn
         $primaryKeyColumn = $this->model->getKeyName();
 
 //        check if current sort is sortable field
-        if ($this->sort !== $orderColumn) {
+        if ($this->getSort() !== $orderColumn) {
             return;
         }
 
@@ -62,7 +62,7 @@ trait WithSortableColumn
             return false;
         }
 
-        return $this->model->determineOrderColumnName() === $this->sort;
+        return $this->model->determineOrderColumnName() === $this->getSort();
     }
 
     public function moveOrderUp($id): void

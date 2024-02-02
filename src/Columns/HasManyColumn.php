@@ -6,12 +6,16 @@ use Illuminate\Contracts\View\View;
 use Xite\Wiretables\Traits\HasColor;
 use Xite\Wiretables\Traits\HasFilterable;
 use Xite\Wiretables\Traits\HasRoute;
+use Closure;
 
 class HasManyColumn extends Column
 {
     use HasFilterable;
     use HasRoute;
     use HasColor;
+
+    private ?Closure $tooltipCallback = null;
+    private ?string $tooltipString = null;
 
     protected int $limit = 10;
     protected ?string $showRouteString = null;
@@ -21,6 +25,27 @@ class HasManyColumn extends Column
         $this->showRouteString = $showRoute;
 
         return $this;
+    }
+
+    public function tooltipUsing(callable|string $tooltip) {
+        if (is_callable($tooltip)) {
+            $this->tooltipCallback = $tooltip;
+        }
+
+        if (is_string($tooltip)) {
+            $this->tooltipString = $tooltip;
+        }
+
+        return $this;
+    }
+
+    public function getTooltips($row)
+    {
+        if (! is_null($this->tooltipCallback)) {
+            return call_user_func($this->tooltipCallback, $row);
+        }
+
+        return $this->tooltipString;
     }
 
     public function getValue($row)
@@ -34,8 +59,8 @@ class HasManyColumn extends Column
             fn () => $this->hasDisplayCallback()
                 ? $this->display($row)
                 : $this->getValue($row)->mapWithKeys(
-                    fn ($row) => [
-                        $row->getKey() => $row->getDisplayName(),
+                    fn ($item) => [
+                        $item->getKey() => $item->getDisplayName(),
                     ]
                 )
         );
@@ -70,6 +95,7 @@ class HasManyColumn extends Column
                 'color' => $this->getColor($row),
                 'limit' => $this->limit,
                 'filter' => $this->getFilterableField($row),
+                'tooltips' => $this->getTooltips($row)
             ])
             ->render();
     }

@@ -1,13 +1,16 @@
 <div class="flex flex-wrap gap-1.5 items-center">
     @foreach($data->take($limit) as $key => $value)
         @if($showRoute)
-            <a @class(["px-1 py-0.5 rounded text-xs", $color]) href="{{ route($showRoute, $key) }}">
+            <a @class(["px-1 py-0.5 rounded text-xs", $color])
+               href="{{ route($showRoute, $key) }}"
+            >
                 {{ $value }}
             </a>
         @else
             <span
                 @class(["px-1 py-0.5 rounded text-xs", $color, "cursor-pointer" => !is_null($filter)])
                 @if(!is_null($filter))@click.prevent="$wire.addFilterOutside('{{ $filter }}', {{ $key }})" @endif
+                @isset($tooltips[$key]) x-tooltip.raw="{{ $tooltips[$key] }}" @endisset
             >
                 {{ $value }}
             </span>
