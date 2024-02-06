@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Xite\Wiretables\Buttons\LinkButton;
 use Xite\Wiretables\Buttons\ModalButton;
 use Xite\Wiretables\Columns\ActionColumn;

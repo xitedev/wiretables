@@ -77,16 +77,6 @@ trait WithFiltering
             ->implode(';');
     }
 
-    private function getTrashedFilter(): ?TrashedFilter
-    {
-        if (! method_exists($this->model, 'bootSoftDeletes')) {
-            return null;
-        }
-
-        return TrashedFilter::make()
-            ->default(null);
-    }
-
     protected function filters(): Collection
     {
         return collect();
@@ -94,8 +84,8 @@ trait WithFiltering
 
     protected function resetFilter(): void
     {
-        $this->allowedFilters
-            ->filter(fn (FilterContract $filter) => $filter->isFillable() && $filter->hasValue())
+        $this->getFilters
+            ->filter(fn (FilterContract $filter) => $filter->isFillable() && $this->filters->has($filter->getName()))
             ->each(fn (FilterContract $filter) => $this->dispatchFilterUpdate($filter->getKebabName(), null));
 
         $this->filters = collect();
@@ -122,7 +112,7 @@ trait WithFiltering
             );
 
             foreach ($selectedFilters->keys() as $selected) {
-                $selectedFilter = $this->filtersWithTrashed()
+                $selectedFilter = $this->getFilters
                     ->first(fn (FilterContract $row) => $row->getName() === $selected);
 
                 $this->filters->forget($selectedFilter->getName());
@@ -137,7 +127,7 @@ trait WithFiltering
     #[On('addFilterOutside')]
     public function addFilterOutside(string $key, $value): void
     {
-        $filter = $this->filtersWithTrashed()
+        $filter = $this->getFilters
             ->first(fn (FilterContract $row) => $row->getName() === $key);
 
         if (! $filter) {
@@ -154,7 +144,7 @@ trait WithFiltering
     #[On('addFilter')]
     public function addFilter(string $key, $value): void
     {
-        $filter = $this->filtersWithTrashed()
+        $filter = $this->getFilters
             ->first(fn (FilterContract $row) => $row->getName() === $key);
 
         if (! $filter) {
@@ -168,29 +158,23 @@ trait WithFiltering
         }
     }
 
-    private function filtersWithTrashed(): Collection
+    #[Computed]
+    protected function getFilters(): Collection
     {
-        $trashedFilter = $this->getTrashedFilter();
-
         return $this->filters()
             ->filter(
-                fn (FilterContract $field) => ! method_exists($field, 'canSee') || $field->canRender
-            )
-            ->when(
-                ! is_null($trashedFilter),
-                fn (Collection $rows) => $rows->push($trashedFilter)
+                fn (FilterContract $filter) => ! method_exists($filter, 'canSee') || $filter->canRender
             );
     }
 
     #[Computed]
-    public function allowedFilters(): Collection
+    public function filledFilters(): Collection
     {
-        return $this->filtersWithTrashed()
+        return $this->getFilters
             ->each(
-                fn (FilterContract $filter) => $filter
-                    ->value(
-                        $this->filters->get($filter->getName())
-                    )
+                fn (FilterContract $filter) => $filter->value(
+                    $this->filters->get($filter->getName())
+                )
             );
     }
 
@@ -202,7 +186,7 @@ trait WithFiltering
 
     public function hasFilter(string $filter, mixed $value = null): bool
     {
-        if (!isset($this->filters[$filter])) {
+        if (! isset($this->filters[$filter])) {
             return false;
         }
 

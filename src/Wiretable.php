@@ -113,7 +113,7 @@ abstract class Wiretable extends Component implements TableContract
 
         if (in_array(WithFiltering::class, $traits)) {
             $builder = $builder->allowedFilters(
-                $this->allowedFilters->toArray()
+                $this->getFilters->toArray()
             );
         }
 
@@ -133,6 +133,16 @@ abstract class Wiretable extends Component implements TableContract
         }
 
         return $builder->paginate($this->perPage)->onEachSide(1);
+    }
+
+    #[Computed]
+    public function hasFilters(): bool
+    {
+        if (! in_array(WithFiltering::class, class_uses_recursive($this))) {
+            return false;
+        }
+
+        return $this->getFilters->count() > 0;
     }
 
     abstract public function columns(): Collection;

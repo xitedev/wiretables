@@ -5,7 +5,7 @@
         </x-slot>
 
         <x-slot name="actions">
-            @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+            @if($this->hasFilters)
                 <button
                     class="group h-full px-3 text-gray-400"
                     @click.prevent="$dispatch('toggle-filter')"
@@ -16,7 +16,7 @@
                 </button>
             @endif
 
-            @if((method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count()) || method_exists($this, 'bootWithSearching'))
+            @if($this->hasFilters || method_exists($this, 'bootWithSearching'))
                 <button
                     class="group h-full px-3 text-gray-400"
                     @click.prevent="$wire.call('resetTable')"

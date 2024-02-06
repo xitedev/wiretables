@@ -1,7 +1,7 @@
 <div {{ $attributes->class('flex flex-col') }}>
-    @if($this->showPerPageOptions || (method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count()) || method_exists($this, 'bootWithActions') || (method_exists($this, 'bootWithSearching') && !$this->disableSearch))
+    @if($this->showPerPageOptions || $this->hasFilters || method_exists($this, 'bootWithActions') || (method_exists($this, 'bootWithSearching') && !$this->disableSearch))
         <div
-            @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+            @if($this->hasFilters)
             x-data="{ filtersAreShown: {{ $this->selectedFiltersCount > 0 ? 'true' : 'false' }} }"
             @toggle-filter.window="filtersAreShown = !filtersAreShown"
             @hide-filter.window="filtersAreShown = false"
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
+            @if($this->hasFilters)
                 <div
                     class="flex justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 dark:text-gray-300 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                     x-show="filtersAreShown"
@@ -74,7 +74,7 @@
                     x-transition:leave-end="opacity-0 scale-90"
                     x-cloak
                 >
-                    @foreach($this->allowedFilters as $filter)
+                    @foreach($this->filledFilters as $filter)
                         <div class="col-span-12 sm:col-span-{{ $filter->getSize() }}" wire:key="filter-{{ $filter->getName() }}">
                             {!! $filter->render() !!}
                         </div>
