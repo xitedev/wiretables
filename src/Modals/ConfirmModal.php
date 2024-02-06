@@ -4,19 +4,27 @@ namespace Xite\Wiretables\Modals;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Computed;
 use LivewireUI\Modal\ModalComponent;
 use Xite\Wireforms\Traits\HasComponentName;
 
 abstract class ConfirmModal extends ModalComponent
 {
-    use AuthorizesRequests;
     use HasComponentName;
 
+    #[Computed]
     abstract public function title(): string;
 
-    public function getDescriptionProperty(): string
+    #[Computed]
+    public function description(): string
     {
         return __('wiretables::modals.confirm_description');
+    }
+
+    #[Computed]
+    public function submitButton(): string
+    {
+        return __('wiretables::modals.confirm');
     }
 
     abstract public function performSubmit(): void;

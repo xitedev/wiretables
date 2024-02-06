@@ -8,6 +8,7 @@ class GalleryColumn extends Column
 {
     public string $collection;
     public bool $hasThumbnail = false;
+    public int $count = -1;
 
     public function collection(string $collection): self
     {
@@ -23,6 +24,13 @@ class GalleryColumn extends Column
         return $this;
     }
 
+    public function count(int $count): self
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
     public function renderIt($row): ?string
     {
         return $this
@@ -31,7 +39,11 @@ class GalleryColumn extends Column
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
                 'displayName' => $row->getDisplayName(),
-                'media' => $row->getMedia($this->collection),
+                'media' => $row->getMedia($this->collection)
+                    ->when(
+                        $this->count > 0,
+                        fn ($media) => $media->take($this->count)
+                    ),
                 'firstImage' => $row->getFirstMediaUrl($this->collection, $this->hasThumbnail ? 'thumb' : ''),
             ])
             ->render();

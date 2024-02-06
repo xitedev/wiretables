@@ -37,11 +37,9 @@
                 </svg>
             </button>
 
-            @if($this->globalButtons)
-                @foreach($this->globalButtons as $button)
-                    {!! $button->renderIt() !!}
-                @endforeach
-            @endif
+            @isset($buttons)
+                {!! $buttons !!}
+            @endisset
         </x-slot>
     @endif
 

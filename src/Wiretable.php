@@ -41,19 +41,21 @@ abstract class Wiretable extends Component implements TableContract
     #[On('resetTable')]
     public function resetTable(): void
     {
-        if (in_array(WithPagination::class, class_uses_recursive($this))) {
+        $traits = class_uses_recursive($this);
+
+        if (in_array(WithPagination::class, $traits)) {
             $this->resetPage();
         }
 
-        if (in_array(WithFiltering::class, class_uses_recursive($this))) {
+        if (in_array(WithFiltering::class, $traits)) {
             $this->resetFilter();
         }
 
-        if (in_array(WithSorting::class, class_uses_recursive($this))) {
+        if (in_array(WithSorting::class, $traits)) {
             $this->resetSort();
         }
 
-        if (in_array(WithSearching::class, class_uses_recursive($this))) {
+        if (in_array(WithSearching::class, $traits)) {
             $this->resetSearch();
         }
     }
@@ -70,33 +72,35 @@ abstract class Wiretable extends Component implements TableContract
     #[Computed]
     public function getColumns(): Collection
     {
+        $traits = class_uses_recursive($this);
+
         return $this->columns()
             ->filter(fn ($column) => $column instanceof ColumnContract)
             ->filter(fn ($column) => $column->canRender)
             ->when(
-                in_array(WithSearching::class, class_uses_recursive($this)) && $this->searchString,
+                in_array(WithSearching::class, $traits) && $this->searchString,
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->highlight($this->searchString)
                 )
             )
             ->when(
-                in_array(WithFiltering::class, class_uses_recursive($this)) && method_exists($this, 'notFilterable'),
+                in_array(WithFiltering::class, $traits) && method_exists($this, 'notFilterable'),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->notFilterable()
                 )
             )
             ->when(
-                in_array(WithSorting::class, class_uses_recursive($this)),
+                in_array(WithSorting::class, $traits),
                 fn (Collection $rows) => $rows->each(
                     fn (Column $column) => $column->currentSort($this->getSort())
                 )
             )
             ->when(
-                in_array(WithButtons::class, class_uses_recursive($this)) && $actionColumn = $this->getActionColumn(),
+                in_array(WithButtons::class, $traits) && $actionColumn = $this->getActionColumn(),
                 fn (Collection $rows) => $rows->push($actionColumn)
             )
             ->when(
-                in_array(WithActions::class, class_uses_recursive($this)) && $checkboxColumn = $this->getCheckboxColumn(),
+                in_array(WithActions::class, $traits) && $checkboxColumn = $this->getCheckboxColumn(),
                 fn (Collection $rows) => $rows->prepend($checkboxColumn)
             );
     }
@@ -104,15 +108,16 @@ abstract class Wiretable extends Component implements TableContract
     #[Computed]
     public function getData()
     {
+        $traits = class_uses_recursive($this);
         $builder = QueryBuilder::for($this->query(), $this->getRequest());
 
-        if (in_array(WithFiltering::class, class_uses_recursive($this))) {
+        if (in_array(WithFiltering::class, $traits)) {
             $builder = $builder->allowedFilters(
                 $this->allowedFilters->toArray()
             );
         }
 
-        if (in_array(WithSorting::class, class_uses_recursive($this))) {
+        if (in_array(WithSorting::class, $traits)) {
             $builder = $builder
                 ->defaultSort($this->getDefaultSort())
                 ->allowedSorts(
@@ -120,7 +125,7 @@ abstract class Wiretable extends Component implements TableContract
                 );
         }
 
-        if (in_array(WithSearching::class, class_uses_recursive($this)) && (! $this->disableSearch && $this->searchString)) {
+        if (in_array(WithSearching::class, $traits) && (! $this->disableSearch && $this->searchString)) {
             $builder = $builder
                 ->tap(
                     new SearchFilter($this->searchString, $this->strict)
@@ -137,5 +142,4 @@ abstract class Wiretable extends Component implements TableContract
     abstract public function title(): string;
 
     abstract protected function query(): Builder|Relation;
-
 }

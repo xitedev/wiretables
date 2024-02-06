@@ -19,38 +19,6 @@ trait WithButtons
 {
     use AuthorizesRequests;
 
-    private array $actionButtons = [];
-
-    public array $createButtonParams = [];
-    public ?string $createButton = null;
-    public ?string $showButton = null;
-    public ?string $editButton = null;
-
-    public function bootWithButtons(): void
-    {
-//
-    }
-
-    public function showDeleteButton(): bool
-    {
-        return true;
-    }
-
-    public function deleteButton(): string
-    {
-        return 'xite.wiretables.modals.delete-modal';
-    }
-
-    public function restoreButton(): string
-    {
-        return 'xite.wiretables.modals.restore-modal';
-    }
-
-    public function showRestoreButton(): bool
-    {
-        return method_exists($this->model, 'bootSoftDeletes');
-    }
-
     protected function can(string $ability, Model|string $model): bool
     {
         try {
@@ -62,109 +30,27 @@ trait WithButtons
         }
     }
 
-    public function getAllowedButtonsProperty(): Collection
+    public function globalButtons(): Collection
     {
         return $this->buttons()
-            ->reject(fn (ButtonContract $button) => $button->isGlobal())
-            ->when(
-                $this->showButton,
-                fn ($buttons) => $buttons->push(
-                    LinkButton::make('show')
-                        ->icon('heroicon-o-eye')
-                        ->routeUsing(fn ($row) => route($this->showButton, $row))
-                        ->displayIf(fn ($row) => $this->can('view', $row))
-                )
-            )
-            ->when(
-                $this->editButton,
-                fn ($buttons) => $buttons->push(
-                    ModalButton::make('edit')
-                        ->icon('heroicon-o-pencil')
-                        ->modal($this->editButton)
-                        ->withParams(fn ($row) => [
-                            'model' => $row->getKey(),
-                        ])
-                        ->displayIf(fn ($row) => $this->can('update', $row))
-                )
-            )
-            ->when(
-                $this->showDeleteButton(),
-                fn ($buttons) => $buttons->push(
-                    ModalButton::make('delete')
-                        ->icon('heroicon-o-trash')
-                        ->modal($this->deleteButton())
-                        ->withParams(fn ($row) => [
-                            'modelName' => get_class($row),
-                            'modelId' => $row->getKey(),
-                        ])
-                        ->displayIf(fn ($row) => $this->can('delete', $row))
-                )
-            )
-            ->when(
-                $this->showRestoreButton(),
-                fn ($buttons) => $buttons->push(
-                    ModalButton::make('restore')
-                        ->icon('heroicon-o-arrow-uturn-left')
-                        ->modal($this->restoreButton())
-                        ->withParams(fn ($row) => [
-                            'modelName' => get_class($row),
-                            'modelId' => $row->getKey(),
-                        ])
-                        ->displayIf(fn ($row) => $this->can('restore', $row))
-                )
-            )
-            ->filter(fn ($button) => $button instanceof ButtonContract);
-    }
-
-    public function getCreateButtonParams(): array
-    {
-        $buttons = [];
-
-        if (method_exists($this, 'mountWithFiltering')) {
-            $buttons['fillFields'] = $this->allowedFilters
-                ->filter(fn (FilterContract $filter) => $filter->canBeFilledOnCreate() && ! is_null($filter->value))
-                ->mapWithKeys(fn (FilterContract $filter) => [$filter->getName() => $filter->value])
-                ->toArray();
-        }
-
-        return array_filter(
-            array_merge_recursive(
-                $this->createButtonParams,
-                $buttons
-            )
-        );
-    }
-
-    public function getGlobalButtonsProperty(): Collection
-    {
-        return $this->buttons()
-            ->filter(fn (ButtonContract $button) => $button->isGlobal())
-            ->when(
-                $this->createButton,
-                fn ($buttons) => $buttons->push($this->getCreateButton())
-            )
             ->filter(fn ($button) => $button instanceof ButtonContract)
+            ->filter(fn (ButtonContract $button) => $button->isGlobal())
             ->filter(fn ($button) => $button->canDisplay());
     }
 
-    protected function getCreateButton(): ButtonContract
+    public function actionButtons(): Collection
     {
-        return ModalButton::make('create')
-            ->icon('heroicon-o-plus')
-            ->title(__('wiretables::table.add'))
-            ->modal($this->createButton)
-            ->withParams(fn () => $this->getCreateButtonParams())
-            ->displayIf(fn () => $this->can('create', $this->model));
+        return $this->buttons()
+            ->filter(fn ($button) => $button instanceof ButtonContract)
+            ->reject(fn (ButtonContract $button) => $button->isGlobal());
     }
 
     protected function getActionColumn(): ?ColumnContract
     {
-        if (! $this->allowedButtons->count()) {
-            return null;
-        }
-
         return ActionColumn::make('action')
-            ->withButtons($this->allowedButtons);
+            ->withButtons(
+                $this->actionButtons()
+            );
     }
 
     protected function buttons(): Collection

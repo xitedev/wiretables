@@ -13,7 +13,7 @@
                         <label for="per-page" class="text-sm text-gray-500">{{ __('wiretables::table.per_page') }}</label>
                         <select
                             id="per-page"
-                            class="block pl-2 w-16 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
+                            class="block pl-2 w-16 py-1 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:focus:border-primary-700 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                             name="perPage"
                             wire:model.live="perPage"
                         >
@@ -45,17 +45,17 @@
                                     type="search"
                                     value="{{ $this->searchString }}"
                                     wire:model.live.debounce.1000ms="searchString"
-                                    class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 leading-5 bg-white placeholder-gray-300 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
+                                    class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 leading-5 bg-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 dark:focus:border-primary-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                                 >
-                                @unless($this->disableStrict)
+                                @if($this->searchString && !$this->disableStrict)
                                     <div class="absolute inset-y-0 right-0 pr-2 flex items-center">
                                         <input name="strict"
                                                type="checkbox"
-                                               class="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary-500 checked:border-primary-500 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
+                                               class="appearance-none h-4 w-4 border border-gray-300 dark:border-primary-700 rounded-sm bg-white dark:bg-gray-700 checked:bg-primary-500 checked:border-primary-500 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
                                                wire:model.live="strict"
                                         >
                                     </div>
-                                @endunless
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -64,7 +64,7 @@
 
             @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
                 <div
-                    class="flex justify-between bg-white border border-gray-200 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
+                    class="flex justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 dark:text-gray-300 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                     x-show="filtersAreShown"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-90"
@@ -88,7 +88,7 @@
                     x-show="checked.length"
                     x-cloak
                     @toggle-check.window="toggleCheck($event.detail)"
-                    class="flex justify-between bg-white px-6 py-4 mb-2 whitespace-nowrap border-t border-gray-200 last:border-0 text-gray-700 flex flex-wrap w-full align-center items-center"
+                    class="flex justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 dark:text-gray-300 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                     x-transition:enter="transition ease-linear duration-300 transform"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
@@ -144,15 +144,16 @@
                     </x-wiretables::table.tr>
                 @empty
                     <x-wiretables::table.tr>
-                        <x-wiretables::table.td class="whitespace-nowrap border-b border-gray-200" colspan="100">
-                            <div class="flex flex-col gap-2 items-center text-gray-500 justify-center">
+                        <x-wiretables::table.td class="whitespace-nowrap border-b border-gray-200 dark:border-gray-800" colspan="100">
+                            <div class="flex flex-col gap-2 items-center text-gray-500 dark:text-gray-300 justify-center">
                                 <div>
                                     @lang('wiretables::table.table_is_empty')
                                 </div>
 
                                 @if((method_exists($this, 'bootWithSearching') && $this->searchString) || (method_exists($this, 'mountWithFiltering') && $this->selectedFiltersCount > 0))
                                     <div>
-                                        @lang('wiretables::table.reset_filters') <a href="" class="text-primary-700" @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')">@lang('wiretables::table.reset')</a>
+                                        @lang('wiretables::table.reset_filters')
+                                        <a href="#" class="text-primary-700 dark:text-primary-400" @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')">@lang('wiretables::table.reset')</a>
                                     </div>
                                 @endif
                             </div>

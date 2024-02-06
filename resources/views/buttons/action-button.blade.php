@@ -5,6 +5,9 @@
     @else
         wire:click.prevent="{{ $action }}({{ json_encode($params) }})"
     @endif
+    @if($confirmation)
+        wire:confirm="{{ $confirmation }}"
+    @endif
     rel="button"
     wire:key="{{ $key }}"
 >

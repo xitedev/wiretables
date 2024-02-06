@@ -9,6 +9,7 @@ class ActionButton extends Button
     protected string $action;
     protected array $params = [];
     protected ?string $component = null;
+    protected ?string $confirmation = null;
 
     public function action(string $action): self
     {
@@ -24,12 +25,20 @@ class ActionButton extends Button
         return $this;
     }
 
+    public function confirmation(string $confirmation) : self
+    {
+        $this->confirmation = $confirmation;
+
+        return $this;
+    }
+
     public function render(): View
     {
         return view('wiretables::buttons.action-button')
             ->with([
                 'action' => $this->action,
                 'component' => $this->component,
+                'confirmation' => $this->confirmation,
             ]);
     }
 }

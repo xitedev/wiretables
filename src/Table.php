@@ -3,14 +3,14 @@
 namespace Xite\Wiretables;
 
 use Illuminate\Contracts\View\View;
+use Xite\Wiretables\Contracts\TableContract;
 use Xite\Wiretables\Traits\WithActions;
 use Xite\Wiretables\Traits\WithButtons;
 use Xite\Wiretables\Traits\WithFiltering;
 use Xite\Wiretables\Traits\WithSearching;
 use Xite\Wiretables\Traits\WithSorting;
-use function Livewire\store;
 
-abstract class Table extends Wiretable
+abstract class Table extends Wiretable implements TableContract
 {
     use WithFiltering;
     use WithSearching;
@@ -26,7 +26,7 @@ abstract class Table extends Wiretable
             ->layout($this->layout ?? config('wiretables.layout'))
             ->title($this->title)
             ->layoutData([
-                'buttons' =>  $this->globalButtons
+                'buttons' =>  $this->globalButtons()
                     ->map(fn ($button) => $button->renderIt()->render())
                     ->implode("\r\n")
             ]);

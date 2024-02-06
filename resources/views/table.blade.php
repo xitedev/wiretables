@@ -3,7 +3,7 @@
         <x-slot name="actions">
             @if(method_exists($this, 'mountWithFiltering') && $this->allowedFilters?->count())
                 <button
-                    class="relative p-2 text-gray-400 rounded-full group hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-200 transition ease-in-out duration-150"
+                    class="relative p-2 text-gray-400 rounded-full group hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 focus:bg-gray-200 dark:focus:bg-gray-800 transition ease-in-out duration-150"
                     @click.prevent="$dispatch('toggle-filter')"
                 >
                     <svg class="w-6 h-5 group-hover:text-gray-500 group-focus:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -16,7 +16,7 @@
             @endif
 
             <button
-                class="p-2 text-gray-400 rounded-full group hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-200 transition ease-in-out duration-150"
+                class="relative p-2 text-gray-400 rounded-full group hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 focus:bg-gray-200 dark:focus:bg-gray-800 transition ease-in-out duration-150"
                 @click.prevent="$wire.call('resetTable') && $dispatch('hide-filter')"
             >
                 <svg class="w-6 h-6 group-hover:text-gray-500 group-focus:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
@@ -25,7 +25,7 @@
             </button>
 
             <button
-                class="p-2 text-gray-400 rounded-full group hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-200 transition ease-in-out duration-150"
+                class="relative p-2 text-gray-400 rounded-full group hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 focus:bg-gray-200 dark:focus:bg-gray-800 transition ease-in-out duration-150"
                 @click.prevent="$wire.call('$refresh')"
                 @refresh-table.window="@this.call('$refresh')"
             >

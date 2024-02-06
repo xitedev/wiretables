@@ -7,7 +7,7 @@
         </div>
 
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
                 {{ $this->title }}
             </h3>
             <div class="mt-2">
@@ -17,6 +17,7 @@
             </div>
         </div>
     </div>
+
     <div class="mt-5 sm:mt-4 sm:ml-10 sm:pl-4 sm:flex">
         <x-wireforms::button.secondary
             wire:click="$dispatch('closeModal')"
@@ -28,7 +29,7 @@
             wire:click="submit"
             type="submit"
             class="inline-flex justify-center w-full sm:w-auto sm:ml-3 mt-3 sm:mt-0"
-            :title="__('wiretables::modals.confirm')"
+            :title="$this->confirmButton"
         />
     </div>
 </div>

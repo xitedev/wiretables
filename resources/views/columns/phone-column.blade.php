@@ -12,7 +12,7 @@
 
         @if($copyButton)
             <button class="opacity-0 group-hover:opacity-100"
-                    title="{{ __('admin.copy') }}"
+                    title="@lang('wiretables::table.copy')"
                     x-clipboard.raw="{{ $data->formatE164() }}"
             >
                 <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
