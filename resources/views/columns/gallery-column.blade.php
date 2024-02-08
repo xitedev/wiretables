@@ -10,11 +10,11 @@
     <div class="flex justify-center items-center" id="gallery-{{ $id }}" x-lightgallery>
         @foreach($media as $image)
             @if($loop->first)
-                <a href="{{ $image->getUrl() }}" >
+                <a href="{{ $image->getUrl() }}">
                     <img class="w-16 h-9 rounded object-cover" loading="lazy" alt="{{ $displayName }}" src="{{ $firstImage }}" />
                 </a>
             @else
-                <a href="{{ $image->getUrl() }}" />
+                <a href="{{ $image->getUrl() }}"></a>
             @endif
         @endforeach
     </div>

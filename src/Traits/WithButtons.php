@@ -48,10 +48,14 @@ trait WithButtons
 
     protected function getActionColumn(): ?ColumnContract
     {
+        $actionButtons = $this->actionButtons();
+
+        if (!$actionButtons->count()) {
+            return null;
+        }
+
         return ActionColumn::make('action')
-            ->withButtons(
-                $this->actionButtons()
-            );
+            ->withButtons($actionButtons);
     }
 
     protected function buttons(): Collection

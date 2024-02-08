@@ -121,6 +121,8 @@ trait WithFiltering
             }
         }
 
+        unset($this->getFilters);
+
         $this->updateFilters();
     }
 

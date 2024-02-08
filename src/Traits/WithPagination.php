@@ -19,8 +19,10 @@ trait WithPagination
 
     public bool $showPerPageOptions = true;
 
+    public string $paginationView = 'wiretables::partials.pagination';
+
     public function bootWithPagination(): void
     {
-        Paginator::defaultView('wiretables::partials.pagination');
+        Paginator::defaultView($this->paginationView);
     }
 }

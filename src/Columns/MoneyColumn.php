@@ -4,9 +4,12 @@ namespace Xite\Wiretables\Columns;
 
 use Illuminate\Contracts\View\View;
 use NumberFormatter;
+use Xite\Wiretables\Traits\HasPopover;
 
 class MoneyColumn extends Column
 {
+    use HasPopover;
+
     public string $currency;
     public bool $hideSymbol = false;
     public bool $showSign = false;
@@ -82,6 +85,7 @@ class MoneyColumn extends Column
                 'data' => $value,
                 'showSign' => $this->showSign,
                 'amount' => $this->getAmount($value),
+                'popover' => $this->getPopover($row)
             ])
             ->render();
     }

@@ -45,6 +45,7 @@
                                     type="search"
                                     value="{{ $this->searchString }}"
                                     wire:model.live.debounce.1000ms="searchString"
+                                    wire:loading.attr="disabled"
                                     class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 leading-5 bg-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 dark:focus:border-primary-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                                 >
                                 @if($this->searchString && !$this->disableStrict)
@@ -64,7 +65,7 @@
 
             @if($this->hasFilters)
                 <div
-                    class="flex justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 dark:text-gray-300 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
+                    class="relative flex justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 mb-2 whitespace-nowrap text-gray-700 dark:text-gray-300 grid gap-4 grid-cols-12 align-center items-center rounded-sm"
                     x-show="filtersAreShown"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-90"
@@ -73,7 +74,9 @@
                     x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-90"
                     x-cloak
+
                 >
+                    <div class="absolute w-full h-full top-0 left-0 z-10 bg-white opacity-25" style="display: none;" wire:loading></div>
                     @foreach($this->filledFilters as $filter)
                         <div class="col-span-12 sm:col-span-{{ $filter->getSize() }}" wire:key="filter-{{ $filter->getName() }}">
                             {!! $filter->render() !!}

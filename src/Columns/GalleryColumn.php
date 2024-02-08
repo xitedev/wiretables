@@ -31,6 +31,11 @@ class GalleryColumn extends Column
         return $this;
     }
 
+    protected function getValue($row)
+    {
+        return $row->getMedia($this->collection);
+    }
+
     public function renderIt($row): ?string
     {
         return $this
@@ -39,12 +44,11 @@ class GalleryColumn extends Column
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
                 'displayName' => $row->getDisplayName(),
-                'media' => $row->getMedia($this->collection)
-                    ->when(
-                        $this->count > 0,
-                        fn ($media) => $media->take($this->count)
-                    ),
-                'firstImage' => $row->getFirstMediaUrl($this->collection, $this->hasThumbnail ? 'thumb' : ''),
+                'media' => $this->displayData($row)->when(
+                    $this->count > 0,
+                    fn ($media) => $media->take($this->count)
+                ),
+                'firstImage' => $this->displayData($row)->first()?->getUrl($this->hasThumbnail ? 'thumb' : ''),
             ])
             ->render();
     }

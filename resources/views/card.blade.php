@@ -43,7 +43,7 @@
         </x-slot>
     @endif
 
-    <x-wiretables::wiretable class="p-2" />
+    <x-wiretables::wiretable class="-m-px" />
 
     @if($this->withFooter)
         <x-slot name="footer">
