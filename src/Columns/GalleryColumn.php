@@ -38,17 +38,21 @@ class GalleryColumn extends Column
 
     public function renderIt($row): ?string
     {
+        $data = $this->displayData($row);
+
         return $this
             ->render()
             ?->with([
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
                 'displayName' => $row->getDisplayName(),
-                'media' => $this->displayData($row)->when(
+                'media' => $data->when(
                     $this->count > 0,
                     fn ($media) => $media->take($this->count)
                 ),
-                'firstImage' => $this->displayData($row)->first()?->getUrl($this->hasThumbnail ? 'thumb' : ''),
+                'firstImage' => $data->first()?->getAvailableUrl(array_filter([
+                    $this->hasThumbnail ? 'thumb' : null
+                ])),
             ])
             ->render();
     }

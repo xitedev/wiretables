@@ -1,4 +1,4 @@
-<div>
+<div @class(["flex items-center justify-center" => $showSign])>
     @if($showSign)
         @if ($data->isPositive())
             <svg class="w-4 h-4 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

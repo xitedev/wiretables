@@ -45,7 +45,6 @@
                                     type="search"
                                     value="{{ $this->searchString }}"
                                     wire:model.live.debounce.1000ms="searchString"
-                                    wire:loading.attr="disabled"
                                     class="block w-60 lg:w-96 px-8 py-1 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 leading-5 bg-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:placeholder-gray-400 focus:border-primary-300 dark:focus:border-primary-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out rounded-sm"
                                 >
                                 @if($this->searchString && !$this->disableStrict)
