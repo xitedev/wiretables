@@ -16,10 +16,12 @@ class BelongsToColumn extends Column
 
     protected ?string $showModal = null;
     private bool $copyButton = false;
+    private ?\Closure $copyString = null;
 
-    public function copyButton(): self
+    public function copyButton(?callable $string = null): self
     {
         $this->copyButton = true;
+        $this->copyString = $string;
 
         return $this;
     }
@@ -68,17 +70,31 @@ class BelongsToColumn extends Column
             : $value->getKey();
     }
 
+    private function getCopyButton($row, $data): ?string
+    {
+        if (! $this->copyButton) {
+            return null;
+        }
+
+        if (! $this->copyString) {
+            return $data;
+        }
+
+        return call_user_func($this->copyString, $row);
+    }
+
     public function renderIt($row): ?string
     {
         $filter = $this->getFilterableField($row);
         $value = $this->getValue($row)?->getKey();
+        $data = $this->displayMapping($row);
 
         return $this
             ->render()
             ?->with([
                 'id' => $row->getKey(),
                 'name' => $this->getName(),
-                'data' => $this->displayMapping($row),
+                'data' => $data,
                 'value' => $value,
                 'filter' => $filter,
                 'filterValue' => $this->getName() !== $filter
@@ -87,7 +103,7 @@ class BelongsToColumn extends Column
                 'icon' => $this->getIcon(),
                 'showModal' => $this->showModal,
                 'route' => $this->getRoute($row),
-                'copyButton' => $this->copyButton,
+                'copyButton' => $this->getCopyButton($row, $data),
             ])
             ->render();
     }
