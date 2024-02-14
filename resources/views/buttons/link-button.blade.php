@@ -3,11 +3,11 @@
    rel="button"
    target="{{ $target }}"
    wire:key="{{ $key }}"
+   alt="{{ $title }}"
 >
     @if($icon)
         @svg($icon, "h-5 w-5 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500")
-    @endif
-    @if($title)
+    @elseif($title)
         <span class="hidden md:inline-block">{{ $title }}</span>
     @endif
 </a>

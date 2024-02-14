@@ -14,11 +14,11 @@
     @endif
     rel="button"
     wire:key="{{ $key }}"
+    alt="{{ $title }}"
 >
     @if($icon)
         @svg($icon, "h-5 w-5")
-    @endif
-    @if($title)
+    @elseif($title)
         <span class="hidden sm:inline-block">{{ $title }}</span>
     @endif
 </button>
