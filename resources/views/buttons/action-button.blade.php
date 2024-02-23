@@ -5,9 +5,9 @@
     @else
         @if($component)
             wire:click.prevent="$dispatchTo('{{ $component  }}', '{{ $action }}', {{ json_encode($params) }})"
-        @else
-            wire:click.prevent="{{ $action }}({{ json_encode($params) }})"
-        @endif
+    @else
+        wire:click.prevent="{{ $action }}({{ json_encode($params) }})"
+    @endif
     @endif
     @if($confirmation)
         wire:confirm="{{ $confirmation }}"
@@ -18,7 +18,8 @@
 >
     @if($icon)
         @svg($icon, "h-5 w-5")
-    @elseif($title)
+    @endif
+    @if($title)
         <span class="hidden sm:inline-block">{{ $title }}</span>
     @endif
 </button>

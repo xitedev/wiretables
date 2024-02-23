@@ -7,7 +7,8 @@
 >
     @if($icon)
         @svg($icon, "h-5 w-5 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500")
-    @elseif($title)
+    @endif
+    @if($title)
         <span class="hidden sm:inline-block">{{ $title }}</span>
     @endif
 </button>
