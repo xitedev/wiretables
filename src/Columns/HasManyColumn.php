@@ -20,7 +20,7 @@ class HasManyColumn extends Column
     protected int $limit = 10;
     protected ?string $showRouteString = null;
 
-    public function showUsing(string $showRoute): self
+    public function showUsing(?string $showRoute = null): self
     {
         $this->showRouteString = $showRoute;
 

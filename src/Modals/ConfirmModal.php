@@ -22,7 +22,7 @@ abstract class ConfirmModal extends ModalComponent
     }
 
     #[Computed]
-    public function submitButton(): string
+    public function confirmButton(): string
     {
         return __('wiretables::modals.confirm');
     }

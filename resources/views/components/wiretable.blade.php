@@ -73,9 +73,8 @@
                     x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-90"
                     x-cloak
-
                 >
-                    <div class="absolute w-full h-full top-0 left-0 z-10 bg-white opacity-25" style="display: none;" wire:loading></div>
+                    <div class="absolute w-full h-full top-0 left-0 z-10 bg-white opacity-0" style="display: none;" wire:loading></div>
                     @foreach($this->filledFilters as $filter)
                         <div class="col-span-12 sm:col-span-{{ $filter->getSize() }}" wire:key="filter-{{ $filter->getName() }}">
                             {!! $filter->render() !!}
