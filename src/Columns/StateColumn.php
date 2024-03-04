@@ -28,6 +28,11 @@ class StateColumn extends Column
         return $this;
     }
 
+    protected function getValue($row)
+    {
+        return $row->{$this->getName()};
+    }
+
     public function renderIt($row): ?string
     {
         if ($this->hasDisplayCallback()) {
