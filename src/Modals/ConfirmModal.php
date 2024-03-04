@@ -34,7 +34,7 @@ abstract class ConfirmModal extends ModalComponent
         $this->performSubmit();
 
         $this->closeModalWithEvents([
-            '$refresh',
+            'formSaved'
         ]);
     }
 
