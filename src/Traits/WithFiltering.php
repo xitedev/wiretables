@@ -194,4 +194,13 @@ trait WithFiltering
 
         return is_null($value) || $this->filters[$filter] === $value;
     }
+
+    public function getFilterValue(string $filter)
+    {
+        if (! isset($this->filters[$filter])) {
+            return null;
+        }
+
+        return $this->filters[$filter];
+    }
 }
