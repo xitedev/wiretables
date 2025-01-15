@@ -8,7 +8,7 @@ use Xite\Wireforms\Components\Fields\Select;
 class SelectFilter extends Filter
 {
     private array $options = [];
-    protected $nullable = false;
+    protected bool $nullable = false;
     protected ?string $keyBy = null;
 
     public function options(array $options): self
