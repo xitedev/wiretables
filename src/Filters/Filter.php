@@ -114,6 +114,10 @@ abstract class Filter extends AllowedFilter implements FilterContract
             ? $this->castValue($value)
             : $value;
 
+        if (! $this->hasDefault) {
+            return $newValue;
+        }
+
         return $newValue !== $this->getDefault() ? $newValue : null;
     }
 }
